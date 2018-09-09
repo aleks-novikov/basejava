@@ -1,16 +1,24 @@
 public class MainArray {
     public static void main(String[] args) {
         MainTestArrayStorage test = new MainTestArrayStorage(10000);
-        test.dataFill(25);
-        test.getSize();
-        test.get_allInfo();
+        Resume res1 = new Resume(1);
+        Resume res2 = new Resume(2);
+        Resume res3 = new Resume(3);
 
-        test.getVal(5);
-        test.delVal(3);
-        test.delVal(6);
-        test.delVal(8);
+        test.save(res1.get_ID());
+        test.save(res2.get_ID());
+        test.save(res3.get_ID());
+        test.getAll();
+        test.size();
 
-        test.get_allInfo();
-        test.arrClear();
+        test.get(1);
+        test.get(5);
+
+        test.delete(2);
+        test.delete(5);
+
+        test.getAll();
+        test.clear();
+        test.size();
     }
 }
