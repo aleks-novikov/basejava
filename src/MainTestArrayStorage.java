@@ -1,20 +1,15 @@
 public class MainTestArrayStorage {
-    private ArrayStorage arr;
+    private ArrayStorage arr = new ArrayStorage();
 
-    MainTestArrayStorage(int size) {
-        arr = new ArrayStorage(size);
-    }
-
-    //задание значений массива
-    void save(int val) {
+    void save(String val) {
         arr.save(val);
     }
 
-    void get(int val) {
+    void get(String val) {
         arr.get(val);
     }
 
-    void delete(int val) {
+    void delete(String val) {
         arr.delete(val);
     }
 
@@ -24,7 +19,7 @@ public class MainTestArrayStorage {
     }
 
     void size() {
-        System.out.println("На данный момент хранилище содержит данные о " + arr.size() + " резюме\n");
+        System.out.println("На данный момент хранилище содержит данные о " + arr.size() +" резюме\n");
     }
 
     void clear() {

@@ -1,38 +1,37 @@
 class ArrayStorage {
-    private int storage[];
-
-    ArrayStorage(int size) {
-        storage = new int[size];
-    }
+    private String[] storage = new String[10_000];
+    private int resAmount = 0;
 
     //сохранение значения в первый пустой элемент массива
-    public void save(int val) {
+    public void save(String str) {
         for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == 0) {
-                storage[i] = val;
+            if (storage[i] == null) {
+                storage[i] = str;
+                resAmount++;
                 return;
             }
         }
     }
 
-    public void get(int id) {
+    public void get(String id) {
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] == id) {
                 System.out.println("ID резюме с номером " + id + " равно " + id);
                 return;
             }
         }
-        System.out.println("Резюме с номером " + id + " не найдено!");
+        System.out.println("null");
     }
 
-    public void delete(int del_ID) {
-        int elemToCopy = storage.length - del_ID;
-
+    public void delete(String del_ID) {
+        int elemToCopy;
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] == del_ID) {
-                System.arraycopy(storage, del_ID, storage, del_ID - 1, elemToCopy);
-                storage[storage.length - 1] = 0;
+                elemToCopy = storage.length - i-1;
+                System.arraycopy(storage, i+1, storage, i, elemToCopy);
+                storage[storage.length - 1] = null;
                 System.out.println("Резюме с номером " + del_ID + " успешно удалено!");
+                resAmount--;
                 return;
             }
         }
@@ -40,24 +39,30 @@ class ArrayStorage {
     }
 
     public int size() {
-        int sum = 0;
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != 0) sum++;
-        }
-        return sum;
-    }
-
-    public void getAll() {
-        System.out.println("\nТекущие данные в массиве: ");
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != 0) {
-                System.out.println(i + 1 + "-е резюме имеет ID=" + storage[i]);
+        if (resAmount == 0) {
+            for (int i = 0; i < storage.length; i++) {
+                if (storage[i] != null) {
+                    resAmount++;
+                }
             }
         }
-        System.out.println();
+        return resAmount;
     }
 
-    public void clear() {
-        for (int i = 0; i < storage.length; i++) storage[i] = 0;
+        public void getAll () {
+            System.out.println("\nТекущие данные в массиве: ");
+            for (int i = 0; i < storage.length; i++) {
+                if (storage[i] != null) {
+                    System.out.print(storage[i] + " ");
+                }
+            }
+            System.out.println();
+        }
+
+        public void clear () {
+            resAmount = 0;
+            for (int i = 0; i < storage.length; i++) {
+                storage[i] = null;
+            }
+        }
     }
-}
