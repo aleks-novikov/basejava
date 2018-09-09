@@ -39,13 +39,6 @@ class ArrayStorage {
     }
 
     public int size() {
-        if (resAmount == 0) {
-            for (int i = 0; i < storage.length; i++) {
-                if (storage[i] != null) {
-                    resAmount++;
-                }
-            }
-        }
         return resAmount;
     }
 
