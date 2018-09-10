@@ -25,5 +25,6 @@ public class MainArray {
         test.size();
         test.clear();
         test.size();
+        test.getAll();
     }
 }

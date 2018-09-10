@@ -6,7 +6,7 @@ public class MainTestArrayStorage {
     }
 
     void get(String val) {
-        System.out.println("ID резюме с номером " + val + " равно " + arr.get(val));
+        System.out.println(arr.get(val));
     }
 
     void delete(String val) {
@@ -15,7 +15,6 @@ public class MainTestArrayStorage {
 
     void getAll() {
         arr.getAll();
-        System.out.println();
     }
 
     void size() {
