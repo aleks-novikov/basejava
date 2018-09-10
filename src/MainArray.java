@@ -7,11 +7,11 @@ public class MainArray {
         Resume res4 = new Resume("4");
         Resume res5 = new Resume("5");
 
-        test.save(res1.getUuid());
-        test.save(res2.getUuid());
-        test.save(res3.getUuid());
-        test.save(res4.getUuid());
-        test.save(res5.getUuid());
+        test.save(res1);
+        test.save(res2);
+        test.save(res3);
+        test.save(res4);
+        test.save(res5);
         test.getAll();
         test.size();
 
