@@ -1,11 +1,11 @@
 public class Resume {
     private String uuid;
 
-    Resume (String id){
-        this.uuid = id;
+    Resume(String uuid) {
+        this.uuid = uuid;
     }
 
-    public String getUuid(){
+    public String getUuid() {
         return uuid;
     }
 }
