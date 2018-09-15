@@ -100,7 +100,7 @@ class ArrayStorage {
                     System.out.print(" успешно удалено!");
                     break;
                 case 4:
-                    System.out.println(" успешно сохранено!");
+                    System.out.print(" успешно сохранено!");
 
             }
         } else {
