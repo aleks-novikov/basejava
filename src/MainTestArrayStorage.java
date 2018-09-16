@@ -5,12 +5,12 @@ public class MainTestArrayStorage {
         arr.save(resume);
     }
 
-    void update(Resume resume) {
-        arr.update(resume);
+    void get(String uuid) {
+        System.out.println("Резюме с uuid номер " + uuid + " - " + arr.get(uuid));
     }
 
-    void get(String uuid) {
-        System.out.println("\nРезюме с uuid номер " + uuid + " - " + arr.get(uuid));
+    void update(Resume resume){
+        arr.update(resume);
     }
 
     void delete(String uuid) {
