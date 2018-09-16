@@ -1,35 +1,38 @@
+/**
+ * Test for your ArrayStorage implementation
+ */
 public class MainTestArrayStorage {
-    private ArrayStorage arr = new ArrayStorage();
+    static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
 
-    void save(Resume resume) {
-        arr.save(resume);
+    public static void main(String[] args) {
+        Resume r1 = new Resume("uuid1");
+        Resume r2 = new Resume("uuid2");
+        Resume r3 = new Resume("uuid3");
+
+        ARRAY_STORAGE.save(r1);
+        ARRAY_STORAGE.save(r2);
+        ARRAY_STORAGE.save(r3);
+
+        System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.getUuid()));
+        System.out.println("Size: " + ARRAY_STORAGE.size());
+
+        System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
+
+        ARRAY_STORAGE.update(r1);
+
+        printAll();
+        ARRAY_STORAGE.delete(r1.getUuid());
+        printAll();
+        ARRAY_STORAGE.clear();
+        printAll();
+
+        System.out.println("Size: " + ARRAY_STORAGE.size());
     }
 
-    void get(String uuid) {
-        System.out.println("Резюме с uuid номер " + uuid + " - " + arr.get(uuid));
-    }
-
-    void update(Resume resume){
-        arr.update(resume);
-    }
-
-    void delete(String uuid) {
-        arr.delete(uuid);
-    }
-
-    void getAll() {
-        Resume resumes[] = arr.getAll();
-        for (int i = 0; i < resumes.length; i++) {
-            System.out.println(resumes[i]);
+    static void printAll() {
+        System.out.println("\nGet All");
+        for (Resume r : ARRAY_STORAGE.getAll()) {
+            System.out.println(r);
         }
-    }
-
-    void size() {
-        System.out.println("На данный момент хранилище содержит данные о " + arr.size() + " резюме\n");
-    }
-
-    void clear() {
-        arr.clear();
-        System.out.println("Массив с данными был очищен!");
     }
 }

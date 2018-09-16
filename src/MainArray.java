@@ -1,62 +1,74 @@
-/*
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
+/**
+ * Interactive test for ArrayStorage implementation
+ * (just run, no need to understand)
+ */
+
 public class MainArray {
+    private final static ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+
     public static void main(String[] args) {
-        MainTestArrayStorage test = new MainTestArrayStorage();
-        Resume res1 = new Resume("1");
-        Resume res2 = new Resume("2");
-        Resume res3 = new Resume("3");
-
-        test.save(res1);
-        test.save(res2);
-        test.save(res3);
-
-        //повторное сохранение резюме
-        test.save(res3);
-
-        test.update(res3);
-        test.delete("3");
-
-        //попытка обновить удалённое резюме
-        test.update(res3);
-
-        //попытка получить удалённое резюме
-        test.get("3");
+        Scanner sc = new Scanner(new InputStreamReader(System.in));
+        Resume r;
+        while (true) {
+            System.out.print("Введите одну из команд - (list | save uuid | delete uuid | get uuid | update uuid | clear | exit): ");
+            String[] params = sc.nextLine().trim().toLowerCase().split(" ");
+            if (params.length < 1 || params.length > 2) {
+                System.out.println("Неверная команда.");
+                continue;
+            }
+            String uuid = null;
+            if (params.length == 2) {
+                uuid = params[1].intern();
+            }
+            switch (params[0]) {
+                case "list":
+                    printAll();
+                    break;
+                case "size":
+                    System.out.println(ARRAY_STORAGE.size());
+                    break;
+                case "save":
+                    r = new Resume(uuid);
+                    ARRAY_STORAGE.save(r);
+                    printAll();
+                    break;
+                case "delete":
+                    ARRAY_STORAGE.delete(uuid);
+                    printAll();
+                    break;
+                case "update":
+                    ARRAY_STORAGE.update(ARRAY_STORAGE.get(uuid));
+                    break;
+                case "get":
+                    System.out.println(ARRAY_STORAGE.get(uuid));
+                    break;
+                case "clear":
+                    ARRAY_STORAGE.clear();
+                    printAll();
+                    break;
+                case "exit":
+                    return;
+                default:
+                    System.out.println("Неверная команда.");
+                    break;
+            }
+        }
     }
-}
-*/
 
-public class MainArray {
-    public static void main(String[] args) {
-        MainTestArrayStorage test = new MainTestArrayStorage();
-        Resume res1 = new Resume("1");
-        Resume res2 = new Resume("2");
-        Resume res3 = new Resume("3");
-        Resume res4 = new Resume("4");
-        Resume res5 = new Resume("5");
-
-        test.save(res1);
-        test.save(res2);
-        test.save(res3);
-        test.save(res4);
-        test.save(res5);
-        test.save(res5);
-
-        test.getAll();
-        test.size();
-
-        test.get("1");
-        test.get("4");
-
-        test.update(res1);
-
-        test.delete("3");
-        test.delete("5");
-        test.update(res5);
-
-        test.getAll();
-        test.size();
-        test.clear();
-        test.size();
-        test.getAll();
+    static void printAll() {
+        Resume[] all = ARRAY_STORAGE.getAll();
+        System.out.println("----------------------------");
+        if (all.length == 0) {
+            System.out.println("Empty");
+        } else {
+            for (Resume r : all) {
+                System.out.println(r);
+            }
+        }
+        System.out.println("----------------------------");
     }
 }
