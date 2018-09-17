@@ -1,6 +1,6 @@
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Scanner;
 
 /**
  * Interactive test for ArrayStorage implementation
@@ -10,12 +10,12 @@ import java.util.Scanner;
 public class MainArray {
     private final static ArrayStorage ARRAY_STORAGE = new ArrayStorage();
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(new InputStreamReader(System.in));
+    public static void main(String[] args) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume r;
         while (true) {
             System.out.print("Введите одну из команд - (list | save uuid | delete uuid | get uuid | update uuid | clear | exit): ");
-            String[] params = sc.nextLine().trim().toLowerCase().split(" ");
+            String[] params = reader.readLine().trim().toLowerCase().split(" ");
             if (params.length < 1 || params.length > 2) {
                 System.out.println("Неверная команда.");
                 continue;
@@ -41,7 +41,10 @@ public class MainArray {
                     printAll();
                     break;
                 case "update":
-                    ARRAY_STORAGE.update(ARRAY_STORAGE.get(uuid));
+                    Resume resumeUuid = ARRAY_STORAGE.get(uuid);
+                    if (resumeUuid != null) {
+                        ARRAY_STORAGE.update(ARRAY_STORAGE.get(uuid));
+                    }
                     break;
                 case "get":
                     System.out.println(ARRAY_STORAGE.get(uuid));
