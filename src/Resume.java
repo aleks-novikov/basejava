@@ -1,8 +1,12 @@
 public class Resume {
     private String uuid;
 
-    protected Resume(String uuid) {
+    public Resume(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     @Override

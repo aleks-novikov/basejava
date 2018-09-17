@@ -41,10 +41,8 @@ public class MainArray {
                     printAll();
                     break;
                 case "update":
-                    Resume resumeUuid = ARRAY_STORAGE.get(uuid);
-                    if (resumeUuid != null) {
-                        ARRAY_STORAGE.update(ARRAY_STORAGE.get(uuid));
-                    }
+                    r = new Resume(uuid);
+                   ARRAY_STORAGE.update(r);
                     break;
                 case "get":
                     System.out.println(ARRAY_STORAGE.get(uuid));
