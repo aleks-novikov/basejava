@@ -42,7 +42,7 @@ public class MainArray {
                     break;
                 case "update":
                     r = new Resume(uuid);
-                   ARRAY_STORAGE.update(r);
+                    ARRAY_STORAGE.update(r);
                     break;
                 case "get":
                     System.out.println(ARRAY_STORAGE.get(uuid));

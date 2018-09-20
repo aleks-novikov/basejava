@@ -1,5 +1,8 @@
-class ArrayStorage {
-    private Resume[] storage = new Resume[10_000];
+import java.util.Arrays;
+
+class ArrayStorage implements Storage{
+    private static final int STORAGE_LIMIT = 10000;
+    private Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size = 0;
 
     public void save(Resume resume) {
@@ -8,7 +11,7 @@ class ArrayStorage {
             if (size < storage.length) {
                 storage[size] = resume;
                 size++;
-            } else {
+            } else if (size == STORAGE_LIMIT) {
                 System.out.println("Resume " + resume + " не может быть сохранено. Хранилище заполнено!");
             }
         } else {
@@ -51,17 +54,11 @@ class ArrayStorage {
     }
 
     public Resume[] getAll() {
-        Resume allResumes[] = new Resume[size];
-        for (int i = 0; i < size; i++) {
-            allResumes[i] = storage[i];
-        }
-        return allResumes;
+        return Arrays.copyOfRange(storage, 0, size);
     }
 
     public void clear() {
-        for (int i = 0; i < size; i++) {
-            storage[i] = null;
-        }
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
