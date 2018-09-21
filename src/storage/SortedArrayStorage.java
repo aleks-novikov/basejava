@@ -25,9 +25,9 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         if (index == -1) {
             System.out.println("Resume c uuid номер " + uuid + " не найдено!");
         } else {
+            System.arraycopy(storage, index + 1, storage, index, STORAGE_LIMIT - index - 1);
+            size--;
         }
-        System.arraycopy(storage, index + 1, storage, index, STORAGE_LIMIT - index - 1);
-        size--;
     }
 
     @Override
