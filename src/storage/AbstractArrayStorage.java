@@ -16,7 +16,12 @@ public abstract class AbstractArrayStorage implements Storage {
         } else if (size >= STORAGE_LIMIT) {
             System.out.println("Хранилище заполнено!");
         } else {
-            storage[size] = r;
+            int index = Arrays.binarySearch(storage, 0, size, r);
+            if (index < 0) {
+                index = -(index + 1);
+            }
+            System.arraycopy(storage, index, storage, index + 1, size - index);
+            storage[index] = r;
             size++;
         }
     }

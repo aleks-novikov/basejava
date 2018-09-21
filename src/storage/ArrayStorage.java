@@ -2,10 +2,9 @@ package storage;
 
 import model.Resume;
 
-import java.util.Arrays;
-
 public class ArrayStorage extends AbstractArrayStorage {
 
+    @Override
     public boolean resumeIsExist(String uuid) {
         if ((getIndex(uuid)) != -1) {
             return true;
