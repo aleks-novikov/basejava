@@ -6,29 +6,20 @@ import java.util.Arrays;
 
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public void save(Resume r) {
-        String uuid = r.getUuid();
+    public boolean resumeIsExist(String uuid) {
         if ((getIndex(uuid)) != -1) {
-            System.out.println("Resume c uuid номер " + uuid + " уже существует!");
-        } else if (size >= STORAGE_LIMIT) {
-            System.out.println("Хранилище заполнено!");
-        } else {
-            storage[size] = r;
-            size++;
+            return true;
         }
+        return false;
     }
 
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index == -1) {
-            System.out.println("Resume c uuid номер " + uuid + " не найдено!");
-        } else {
-            storage[index] = storage[size - 1];
-            storage[size - 1] = null;
-            size--;
-        }
+    @Override
+    public void resumeDelete(Resume[] storage, int index, int size) {
+        storage[index] = storage[size - 1];
+        storage[size - 1] = null;
     }
 
+    @Override
     protected int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {

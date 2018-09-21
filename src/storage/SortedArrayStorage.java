@@ -6,28 +6,16 @@ import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
-    @Override
-    public void save(Resume r) {
-        String uuid = r.getUuid();
+    public boolean resumeIsExist(String uuid) {
         if ((getIndex(uuid)) == 0) {
-            System.out.println("Resume c uuid номер " + uuid + " уже существует!");
-        } else if (size >= STORAGE_LIMIT) {
-            System.out.println("Хранилище заполнено!");
-        } else {
-            storage[size] = r;
-            size++;
+            return true;
         }
+        return false;
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index == -1) {
-            System.out.println("Resume c uuid номер " + uuid + " не найдено!");
-        } else {
-            System.arraycopy(storage, index + 1, storage, index, STORAGE_LIMIT - index - 1);
-            size--;
-        }
+    public void resumeDelete(Resume[] storage, int index, int size) {
+        System.arraycopy(storage, index + 1, storage, index, size - index);
     }
 
     @Override
