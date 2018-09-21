@@ -1,6 +1,6 @@
-import java.util.Objects;
+package model;
 
-public class Resume {
+public class Resume implements Comparable<Resume> {
     private String uuid;
 
     public Resume(String uuid) {
@@ -9,6 +9,10 @@ public class Resume {
 
     public String getUuid() {
         return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     @Override
@@ -21,12 +25,18 @@ public class Resume {
         return uuid.equals(resume.uuid);
     }
 
-/*    @Override
+    @Override
     public int hashCode() {
         return uuid.hashCode();
-    }*/
+    }
 
+    @Override
     public String toString() {
         return uuid;
+    }
+
+    @Override
+    public int compareTo(Resume o) {
+        return uuid.compareTo(o.uuid);
     }
 }

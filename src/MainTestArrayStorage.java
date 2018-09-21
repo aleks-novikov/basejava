@@ -1,8 +1,12 @@
+import model.Resume;
+import storage.ArrayStorage;
+import storage.SortedArrayStorage;
+
 /**
- * Test for your ArrayStorage implementation
+ * Test for your storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    static final SortedArrayStorage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume("uuid1");
@@ -21,7 +25,7 @@ public class MainTestArrayStorage {
         ARRAY_STORAGE.update(r1);
 
         printAll();
-        ARRAY_STORAGE.delete(r1.getUuid());
+        ARRAY_STORAGE.delete(r2.getUuid());
         printAll();
         ARRAY_STORAGE.clear();
         printAll();
@@ -30,7 +34,7 @@ public class MainTestArrayStorage {
     }
 
     static void printAll() {
-        System.out.println("\nGet All");
+        System.out.println("\nGet All:");
         for (Resume r : ARRAY_STORAGE.getAll()) {
             System.out.println(r);
         }
