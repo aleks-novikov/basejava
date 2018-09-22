@@ -5,17 +5,12 @@ import model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public boolean resumeIsExist(int index) {
-        return index != -1;
-    }
-
-    @Override
-    public void resumeSave(Resume[] storage, int index, int size, Resume r) {
+    public void resumeSave(int index, Resume r) {
         storage[size] = r;
     }
 
     @Override
-    public void resumeDelete(Resume[] storage, int index, int size) {
+    public void resumeDelete(int index) {
         storage[index] = storage[size - 1];
         storage[size - 1] = null;
     }
