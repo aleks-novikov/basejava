@@ -1,21 +1,32 @@
 package storage;
 
 import model.Resume;
+
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public boolean resumeIsExist(String uuid) {
-        if ((getIndex(uuid)) == 0) {
-            return true;
+    public boolean resumeIsExist(int index) {
+        return index == 0;
+    }
+
+    @Override
+    public void resumeSave(Resume[] storage, int index, int size, Resume r) {
+        if (index < 0) {
+            index = -(index + 1);
         }
-        return false;
+        System.arraycopy(storage, index, storage, index + 1, size - index);
+        storage[index] = r;
     }
 
     @Override
     public void resumeDelete(Resume[] storage, int index, int size) {
-        System.arraycopy(storage, index + 1, storage, index, size - index);
+        if (index == size - 1) {
+            storage[index] = null;
+        } else {
+            System.arraycopy(storage, index + 1, storage, index, size - index);
+        }
     }
 
     @Override

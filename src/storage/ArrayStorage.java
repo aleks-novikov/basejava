@@ -5,11 +5,13 @@ import model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public boolean resumeIsExist(String uuid) {
-        if ((getIndex(uuid)) != -1) {
-            return true;
-        }
-        return false;
+    public boolean resumeIsExist(int index) {
+        return index != -1;
+    }
+
+    @Override
+    public void resumeSave(Resume[] storage, int index, int size, Resume r) {
+        storage[size] = r;
     }
 
     @Override

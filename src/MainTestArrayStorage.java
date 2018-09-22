@@ -1,12 +1,13 @@
 import model.Resume;
 import storage.ArrayStorage;
 import storage.SortedArrayStorage;
+import storage.Storage;
 
 /**
  * Test for your storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    static final SortedArrayStorage ARRAY_STORAGE = new SortedArrayStorage();
+    static final Storage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume("uuid1");
@@ -25,8 +26,7 @@ public class MainTestArrayStorage {
         ARRAY_STORAGE.update(r1);
 
         printAll();
-//        ARRAY_STORAGE.delete(r2.getUuid());
-        ARRAY_STORAGE.delete(r2.getUuid());
+        ARRAY_STORAGE.delete(r3.getUuid());
         printAll();
         ARRAY_STORAGE.clear();
         printAll();
