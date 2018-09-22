@@ -15,11 +15,11 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public void resumeDelete(int index) {
-        if (index == size - 1) {
+        int numMoved = size - index - 1;
+        if (numMoved > 0) {
+            System.arraycopy(storage, index + 1, storage, index, numMoved);
+        } else if (index == size - 1) {
             storage[index] = null;
-        } else {
-            System.arraycopy(storage, index + 1, storage, index, size - index - 1);
-            storage[size - 1] = null;
         }
     }
 

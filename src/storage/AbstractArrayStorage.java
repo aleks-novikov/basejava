@@ -28,6 +28,7 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.println("Resume c uuid номер " + uuid + " не найдено!");
         } else {
             resumeDelete(index);
+            storage[size - 1] = null;
             size--;
         }
     }
