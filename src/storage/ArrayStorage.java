@@ -5,8 +5,8 @@ import model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void resumeSave(int index, Resume r) {
-        storage[size] = r;
+    public void resumeSave(int index, Resume resume) {
+        storage[size] = resume;
     }
 
     @Override
