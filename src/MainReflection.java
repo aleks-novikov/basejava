@@ -1,5 +1,3 @@
-package storage;
-
 import model.Resume;
 
 import java.lang.reflect.Field;
