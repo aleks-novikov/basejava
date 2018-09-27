@@ -17,7 +17,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     public void resumeDelete(int index) {
         int numMoved = size - index - 1;
         if (numMoved > 0) {
-            System.arraycopy(storage, index + 1, storage, index, numMoved);
+            System.arraycopy(storage, index + 1, storage, index, numMoved-1);
         } else if (index == size - 1) {
             storage[index] = null;
         }
