@@ -39,22 +39,29 @@ public abstract class AbstractArrayStorageTest {
         assertEquals(oldStorageSize + 1, storage.size());
     }
 
+    @Test(expected = StorageException.class)
+    public void saveOverflow() {
+        storage.clear();
+        try {
+            for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
+                storage.save(new Resume());
+            }
+        } catch (StorageException e) {
+            Assert.fail("Storage was overflowed");
+        }
+        storage.save(new Resume());
+    }
+
     @Test(expected = ExistStorageException.class)
     public void saveExistStorageException() {
         storage.save(resume_3);
     }
 
-    @Test
+    @Test(expected = NotExistStorageException.class)
     public void delete() {
         int oldStorageSize = storage.size();
         storage.delete(UUID_1);
-        storage.delete(UUID_3);
-        assertEquals(oldStorageSize - 2, storage.size());
-    }
-
-    @Test(expected = NotExistStorageException.class)
-    public void getDeletedResume() {
-        storage.delete(UUID_1);
+        assertEquals(oldStorageSize - 1, storage.size());
         storage.get(UUID_1);
     }
 
@@ -86,8 +93,9 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void update() {
-        storage.update(new Resume(UUID_1));
-        assertNotSame(resume_1, storage.get(UUID_1));
+        Resume newResume = new Resume(UUID_1);
+        storage.update(newResume);
+        assertEquals(newResume, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -100,18 +108,5 @@ public abstract class AbstractArrayStorageTest {
         assertEquals(3, storage.getAll().length);
         Resume[] curStorage = {resume_1, resume_2, resume_3};
         assertArrayEquals(curStorage, storage.getAll());
-    }
-
-    @Test(expected = StorageException.class)
-    public void saveOverflow() {
-        storage.clear();
-        try {
-            for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume());
-            }
-        } catch (StorageException e) {
-            Assert.fail("Storage was overflowed");
-        }
-        storage.save(new Resume());
     }
 }
