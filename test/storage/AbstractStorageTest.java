@@ -5,7 +5,6 @@ import exception.NotExistStorageException;
 import exception.StorageException;
 import model.Resume;
 import org.junit.*;
-
 import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
@@ -39,6 +38,7 @@ public abstract class AbstractStorageTest {
         assertEquals(oldStorageSize + 1, storage.size());
     }
 
+    @Ignore
     @Test(expected = StorageException.class)
     public void saveOverflow() {
         try {
@@ -50,6 +50,8 @@ public abstract class AbstractStorageTest {
         }
         storage.save(new Resume());
     }
+//    }
+
 
     @Test(expected = ExistStorageException.class)
     public void saveExistStorageException() {
@@ -102,6 +104,7 @@ public abstract class AbstractStorageTest {
         storage.update(RESUME_4);
     }
 
+    @Ignore
     @Test
     public void getAll() {
         assertEquals(3, storage.getAll().length);

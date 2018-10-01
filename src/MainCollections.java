@@ -30,7 +30,6 @@ public class MainCollections {
                 iterator.remove();
             }
         }
-//        System.out.println(collection.toString());
 
         Map <String, Resume> map = new HashMap<>();
         map.put(UUID_1, RESUME_1);

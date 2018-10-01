@@ -2,11 +2,11 @@ package storage;
 
 import model.Resume;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    List<Resume> list = new ArrayList<>();
+    List<Resume> list = new LinkedList<>();
 
     protected Object getIndex(String uuid) {
         for (int i = 0; i < list.size(); i++)
@@ -37,7 +37,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void doDelete(Object index) {
-        list.remove((int) index);
+        list.remove((int) index);  //приведение к типу Integer не позволяет удалить выбранный элемент из list
     }
 
     @Override

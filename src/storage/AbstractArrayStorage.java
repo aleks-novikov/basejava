@@ -35,38 +35,20 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-//    public void delete(String uuid) {
     protected void doDelete(Object index) {
-//        int index = (Integer) getIndex(uuid);
-//        if (index < 0) {
-//            throw new NotExistStorageException(uuid);
-//        } else {
         resumeDelete((Integer) index);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
-//    public Resume doGet(String uuid) {
     protected Resume doGet(Object index) {
-//        int index = (Integer) getIndex(uuid);
-//        if (index < 0) {
-//            throw new NotExistStorageException(uuid);
-//        }
-//        return storage[index];
         return storage[(Integer)index];
     }
 
     @Override
-//    public void update(Resume resume) {
     protected void doUpdate(Resume resume, Object index) {
-//        int index = (Integer) getIndex(resume.getUuid());
-//        if (index < 0) {
-//            throw new NotExistStorageException(resume.getUuid());
-//        } else {
-//            storage[index] = resume;
             storage[(Integer) index] = resume;
-//        }
     }
 
     public Resume[] getAll() {
