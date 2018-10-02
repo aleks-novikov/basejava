@@ -1,9 +1,10 @@
+/*
 package storage;
 
-import storageWorking.MapStorage;
-
-public class MapStorageTest extends AbstractStorageTest {
+public class MapStorageTest extends StoragesTest {
     public MapStorageTest() {
         super(new MapStorage());
     }
 }
+
+*/

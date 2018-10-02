@@ -1,8 +1,6 @@
 package storage;
 
-import storageWorking.ListStorage;
-
-public class ListStorageTest extends AbstractStorageTest {
+public class ListStorageTest extends StoragesTest {
    public ListStorageTest() {
         super(new ListStorage());
     }

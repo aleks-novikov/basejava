@@ -2,11 +2,12 @@ package storage;
 
 import model.Resume;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    List<Resume> list = new LinkedList<>();
+    protected List<Resume> list = new LinkedList<>();
 
     protected Object getIndex(String uuid) {
         for (int i = 0; i < list.size(); i++)
@@ -18,7 +19,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void doUpdate(Resume r, Object index) {
-        list.set((Integer) index, r);
+        list.set((int) index, r);
     }
 
     @Override
@@ -32,12 +33,12 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected Resume doGet(Object index) {
-        return list.get((Integer) index);
+        return list.get((int) index);
     }
 
     @Override
     protected void doDelete(Object index) {
-        list.remove((int) index);  //приведение к типу Integer не позволяет удалить выбранный элемент из list
+        list.remove((int) index);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return list.toArray(new Resume[list.size()]);
+        return list.toArray(new Resume[0]);
     }
 
     @Override
