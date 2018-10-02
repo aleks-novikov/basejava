@@ -9,18 +9,17 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected Object getIndex(String uuid) {
-        return map.containsKey(uuid) ? uuid : null;
+        return uuid;
     }
 
     @Override
     protected void doUpdate(Resume r, Object index) {
-        map.remove(index);
-        map.put((String) index, r);
+        map.replace((String) index, r);
     }
 
     @Override
     protected boolean isExist(Object index) {
-        return index != null;
+        return map.containsKey(index);
     }
 
     @Override
@@ -45,10 +44,8 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        Resume[] res =  new Resume[map.size()];
-        map.values().toArray(res);
-        return res;
-     }
+        return map.values().toArray(new Resume[0]);
+    }
 
     @Override
     public int size() {

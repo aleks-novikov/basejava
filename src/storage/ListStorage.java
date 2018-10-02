@@ -2,12 +2,13 @@ package storage;
 
 import model.Resume;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    protected List<Resume> list = new LinkedList<>();
+    protected List<Resume> list = new ArrayList<>();
 
     protected Object getIndex(String uuid) {
         for (int i = 0; i < list.size(); i++)
@@ -43,7 +44,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public void clear() {
-        list.removeAll(list);
+        list.clear();
     }
 
     @Override

@@ -5,8 +5,8 @@ import model.Resume;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SortedStorageTestMain extends MainStorageTestClass {
-    public SortedStorageTestMain() {
+public class SortedStorageTest extends MainTest {
+    public SortedStorageTest() {
         super(new SortedArrayStorage());
     }
 
