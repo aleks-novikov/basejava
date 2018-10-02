@@ -1,13 +1,13 @@
 import model.Resume;
-import storage.SortedArrayStorage;
-import storage.Storage;
+import storageWorking.SortedArrayStorage;
+import storageWorking.Storage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Interactive test for storage.ArrayStorage implementation
+ * Interactive test for storageWorking.ArrayStorage implementation
  * (just run, no need to understand)
  */
 

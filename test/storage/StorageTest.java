@@ -1,6 +1,9 @@
 package storage;
 
-public class StorageTest extends AbstractStorageTest {
+import storageWorking.ArrayStorage;
+
+//public class StorageTest extends AbstractStorageTest {
+public class StorageTest extends StoragesCommonTest {
     public StorageTest() {
         super(new ArrayStorage());
     }
