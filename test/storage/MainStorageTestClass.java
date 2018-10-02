@@ -6,7 +6,7 @@ import model.Resume;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-public abstract class StoragesTest {
+public abstract class MainStorageTestClass {
     protected Storage storage;
     protected static final String UUID_1 = "uuid1";
     protected static final String UUID_2 = "uuid2";
@@ -17,7 +17,7 @@ public abstract class StoragesTest {
     protected static final Resume RESUME_3 = new Resume(UUID_3);
     protected static final Resume RESUME_4 = new Resume(UUID_4);
 
-    public StoragesTest(Storage storage) {
+    public MainStorageTestClass(Storage storage) {
         this.storage = storage;
     }
 

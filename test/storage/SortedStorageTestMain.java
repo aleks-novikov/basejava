@@ -1,4 +1,3 @@
-/*
 package storage;
 
 import exception.StorageException;
@@ -6,9 +5,8 @@ import model.Resume;
 import org.junit.Assert;
 import org.junit.Test;
 
-//public class SortedStorageTest extends StorageOverflowTest {
-public class SortedStorageTest extends StoragesTest {
-    public SortedStorageTest() {
+public class SortedStorageTestMain extends MainStorageTestClass {
+    public SortedStorageTestMain() {
         super(new SortedArrayStorage());
     }
 
@@ -25,4 +23,3 @@ public class SortedStorageTest extends StoragesTest {
     }
 
 }
-*/
