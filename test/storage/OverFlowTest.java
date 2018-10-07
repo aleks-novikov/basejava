@@ -5,9 +5,9 @@ import model.Resume;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SortedStorageTest extends OverFlowTest {
-    public SortedStorageTest() {
-        super(new SortedArrayStorage());
+public abstract class OverFlowTest extends MainTest {
+    public OverFlowTest(Storage storage) {
+        super(storage);
     }
 
     @Test(expected = StorageException.class)
@@ -21,5 +21,4 @@ public class SortedStorageTest extends OverFlowTest {
         }
         storage.save(new Resume());
     }
-
 }
