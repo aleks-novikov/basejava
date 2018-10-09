@@ -4,7 +4,14 @@ import model.Resume;
 import exception.NotExistStorageException;
 import exception.ExistStorageException;
 
+import java.util.*;
+
 public abstract class AbstractStorage implements Storage {
+
+    public List<Resume> storageSort(List<Resume> storage) {
+        Collections.sort(storage, Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
+        return storage;
+    }
 
     public void update(Resume r) {
         Object index = getExistedIndex(r.getUuid());

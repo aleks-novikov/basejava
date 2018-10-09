@@ -3,11 +3,14 @@ package storage;
 import model.Resume;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
     protected List<Resume> list = new ArrayList<>();
 
+    @Override
     protected Object getIndex(String uuid) {
         for (int i = 0; i < list.size(); i++)
             if (list.get(i).getUuid().equals(uuid)) {
@@ -26,6 +29,7 @@ public class ListStorage extends AbstractStorage {
         return index != null;
     }
 
+    @Override
     protected void doSave(Resume r, Object index) {
         list.add(r);
     }
@@ -46,8 +50,9 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return list.toArray(new Resume[0]);
+    public List<Resume> getAllSorted() {
+        storageSort(list);
+        return list;
     }
 
     @Override

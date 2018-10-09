@@ -1,8 +1,10 @@
 package storage;
+
 import exception.StorageException;
 import model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10_000;
@@ -19,7 +21,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean isExist (Object index){
+    protected boolean isExist(Object index) {
         return (Integer) index >= 0;
     }
 
@@ -43,16 +45,19 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected Resume doGet(Object index) {
-        return storage[(Integer)index];
+        return storage[(Integer) index];
     }
 
     @Override
     protected void doUpdate(Resume resume, Object index) {
-            storage[(Integer) index] = resume;
+        storage[(Integer) index] = resume;
     }
 
-    public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size);
+    public List<Resume> getAllSorted() {
+        Resume[] arr = new Resume[size];
+        System.arraycopy(storage, 0, arr, 0, size);
+        List <Resume> list = Arrays.asList(arr);
+        return storageSort(list);
     }
 
     protected abstract Object getIndex(String uuid);

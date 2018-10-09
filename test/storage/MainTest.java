@@ -1,9 +1,13 @@
 package storage;
 
+import com.sun.org.apache.regexp.internal.RE;
 import exception.ExistStorageException;
 import exception.NotExistStorageException;
 import model.Resume;
 import org.junit.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -13,10 +17,10 @@ public abstract class MainTest {
     protected static final String UUID_2 = "uuid2";
     protected static final String UUID_3 = "uuid3";
     protected static final String UUID_4 = "uuid4";
-    protected static final Resume RESUME_1 = new Resume(UUID_1);
-    protected static final Resume RESUME_2 = new Resume(UUID_2);
-    protected static final Resume RESUME_3 = new Resume(UUID_3);
-    protected static final Resume RESUME_4 = new Resume(UUID_4);
+    protected static final Resume RESUME_1 = new Resume(UUID_1, "Name1");
+    protected static final Resume RESUME_2 = new Resume(UUID_2, "Name2");
+    protected static final Resume RESUME_3 = new Resume(UUID_3, "Name3");
+    protected static final Resume RESUME_4 = new Resume(UUID_4, "Name4");
 
     public MainTest(Storage storage) {
         this.storage = storage;
@@ -25,9 +29,9 @@ public abstract class MainTest {
     @Before
     public void setUp() {
         storage.clear();
+        storage.save(RESUME_3);
         storage.save(RESUME_1);
         storage.save(RESUME_2);
-        storage.save(RESUME_3);
     }
 
     @Test
@@ -79,7 +83,7 @@ public abstract class MainTest {
 
     @Test
     public void update() {
-        Resume newResume = new Resume(UUID_1);
+        Resume newResume = new Resume(UUID_1, "NewName");
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_1));
     }
@@ -91,8 +95,12 @@ public abstract class MainTest {
 
     @Test
     public void getAll() {
-        assertEquals(3, storage.getAll().length);
-        Resume[] curStorage = {RESUME_1, RESUME_2, RESUME_3};
-        assertArrayEquals(curStorage, storage.getAll());
+        assertEquals(3, storage.getAllSorted().size());
+        assertEquals(Arrays.asList(RESUME_1, RESUME_2, RESUME_3), storage.getAllSorted());
+    }
+
+    @Test (expected = NullPointerException.class)
+    public void setFullNameIncorrectNameException() {
+        storage.save(new Resume("uuid5", null));
     }
 }
