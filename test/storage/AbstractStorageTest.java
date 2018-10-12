@@ -1,18 +1,18 @@
 package storage;
 
-import com.sun.org.apache.regexp.internal.RE;
 import exception.ExistStorageException;
 import exception.NotExistStorageException;
 import model.Resume;
-import org.junit.*;
-import java.util.ArrayList;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.util.Arrays;
-import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public abstract class MainTest {
+public abstract class AbstractStorageTest {
     protected Storage storage;
+    protected int oldStorageSize;
     protected static final String UUID_1 = "uuid1";
     protected static final String UUID_2 = "uuid2";
     protected static final String UUID_3 = "uuid3";
@@ -22,7 +22,8 @@ public abstract class MainTest {
     protected static final Resume RESUME_3 = new Resume(UUID_3, "Name3");
     protected static final Resume RESUME_4 = new Resume(UUID_4, "Name4");
 
-    public MainTest(Storage storage) {
+
+    public AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -32,11 +33,11 @@ public abstract class MainTest {
         storage.save(RESUME_3);
         storage.save(RESUME_1);
         storage.save(RESUME_2);
+        oldStorageSize = storage.size();
     }
 
     @Test
     public void save() {
-        int oldStorageSize = storage.size();
         storage.save(RESUME_4);
         assertEquals(RESUME_4, storage.get(UUID_4));
         assertEquals(oldStorageSize + 1, storage.size());
@@ -49,7 +50,6 @@ public abstract class MainTest {
 
     @Test(expected = NotExistStorageException.class)
     public void delete() {
-        int oldStorageSize = storage.size();
         storage.delete(UUID_1);
         assertEquals(oldStorageSize - 1, storage.size());
         storage.get(UUID_1);
@@ -99,7 +99,7 @@ public abstract class MainTest {
         assertEquals(Arrays.asList(RESUME_1, RESUME_2, RESUME_3), storage.getAllSorted());
     }
 
-    @Test (expected = NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void setFullNameIncorrectNameException() {
         storage.save(new Resume("uuid5", null));
     }

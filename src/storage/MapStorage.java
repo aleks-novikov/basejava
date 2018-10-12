@@ -11,13 +11,13 @@ public class MapStorage extends AbstractStorage {
     private Map<String, Resume> map = new TreeMap<>();
 
     @Override
-    protected Object getIndex(String uuid) {
+    protected Object getSearchKey(String uuid) {
         return uuid;
     }
 
     @Override
-    protected void doUpdate(Resume r, Object uuid) {
-        map.replace((String) uuid, r);
+    protected void doUpdate(Resume resume, Object uuid) {
+        map.replace((String) uuid, resume);
     }
 
     @Override
@@ -26,8 +26,8 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doSave(Resume r, Object uuid) {
-        map.put((String) uuid, r);
+    protected void doSave(Resume resume, Object uuid) {
+        map.put((String) uuid, resume);
     }
 
     @Override
@@ -46,10 +46,8 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        ArrayList list = new ArrayList(map.values());
-        storageSort(list);
-        return list;
+    public List<Resume> getListStorage() {
+        return new ArrayList<>(map.values());
     }
 
     @Override
