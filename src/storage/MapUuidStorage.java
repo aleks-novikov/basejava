@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class MapStorage extends AbstractStorage {
+public class MapUuidStorage extends AbstractStorage {
     private Map<String, Resume> map = new TreeMap<>();
 
     @Override
@@ -46,7 +46,7 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getListStorage() {
+    public List<Resume> getAll() {
         return new ArrayList<>(map.values());
     }
 

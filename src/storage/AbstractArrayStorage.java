@@ -3,7 +3,6 @@ package storage;
 import exception.StorageException;
 import model.Resume;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,10 +53,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         storage[(Integer) index] = resume;
     }
 
-    public List<Resume> getListStorage() {
-        Resume[] arr = new Resume[size];
-        System.arraycopy(storage, 0, arr, 0, size);
-        return new ArrayList<>(Arrays.asList(arr));
+    public List<Resume> getAll() {
+        return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
     protected abstract Object getSearchKey(String uuid);

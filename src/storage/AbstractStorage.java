@@ -1,17 +1,17 @@
 package storage;
 
-import model.Resume;
-import exception.NotExistStorageException;
 import exception.ExistStorageException;
+import exception.NotExistStorageException;
+import model.Resume;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
 
-    public List<Resume> storageSort(List<Resume> storage) {
-        storage.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
-        return storage;
-    }
+    protected static final Comparator<Resume> STORAGE_SORT =
+            (Comparator.comparing(Resume::getFullName).
+                    thenComparing(Resume::getUuid));
 
     public void update(Resume resume) {
         Object searchKey = getExistedSearchKey(resume.getUuid());
@@ -33,6 +33,12 @@ public abstract class AbstractStorage implements Storage {
         return doGet(searchKey);
     }
 
+    public List<Resume> getAllSorted() {
+        List<Resume> list = getAll();
+        list.sort(STORAGE_SORT);
+        return list;
+    }
+
     private Object getExistedSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
         if (!isExist(searchKey)) {
@@ -49,11 +55,7 @@ public abstract class AbstractStorage implements Storage {
         return searchKey;
     }
 
-    public List<Resume> getAllSorted() {
-        return storageSort(getListStorage());
-    }
-
-    protected abstract List<Resume> getListStorage();
+    protected abstract List<Resume> getAll();
 
     protected abstract Object getSearchKey(String uuid);
 
