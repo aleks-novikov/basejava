@@ -18,4 +18,8 @@ public interface Storage {
     List<Resume> getAllSorted();
 
     int size();
+
+    void addResumeContacts(String uuid, String key, String value);
+
+    void getResumeInfo(String uuid);
 }

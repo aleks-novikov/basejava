@@ -5,11 +5,11 @@ import model.Resume;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
     protected List<Resume> list = new ArrayList<>();
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         for (int i = 0; i < list.size(); i++)
             if (list.get(i).getUuid().equals(uuid)) {
                 return i;
@@ -18,28 +18,28 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doUpdate(Resume resume, Object index) {
-        list.set((int) index, resume);
+    protected void doUpdate(Resume resume, Integer index) {
+        list.set(index.intValue(), resume);
     }
 
     @Override
-    protected boolean isExist(Object index) {
+    protected boolean isExist(Integer index) {
         return index != null;
     }
 
     @Override
-    protected void doSave(Resume resume, Object index) {
+    protected void doSave(Resume resume, Integer index) {
         list.add(resume);
     }
 
     @Override
-    protected Resume doGet(Object index) {
-        return list.get((int) index);
+    protected Resume doGet(Integer index) {
+        return list.get(index.intValue());
     }
 
     @Override
-    protected void doDelete(Object index) {
-        list.remove((int) index);
+    protected void doDelete(Integer index) {
+        list.remove(index.intValue());
     }
 
     @Override
@@ -55,5 +55,15 @@ public class ListStorage extends AbstractStorage {
     @Override
     public int size() {
         return list.size();
+    }
+
+    @Override
+    public void addResumeInfo(Integer objResume, String key, String value) {
+        list.get(objResume).addResumeContacts(key, value);
+    }
+
+    @Override
+    public void getInfo(Integer objResume) {
+        list.get(objResume).getContacts();
     }
 }

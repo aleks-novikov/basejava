@@ -3,12 +3,12 @@ package storage;
 import model.Resume;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
-public class MapResumeStorage extends AbstractStorage {
-    private Map<String, Resume> map = new TreeMap<>();
+public class MapResumeStorage extends AbstractStorage<Resume> {
+    private Map<String, Resume> map = new HashMap<>();
 
     @Override
     protected Resume getSearchKey(String uuid) {
@@ -16,28 +16,28 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doUpdate(Resume resume, Object objResume) {
+    protected void doUpdate(Resume resume, Resume objResume) {
         map.replace(resume.getUuid(), resume);
     }
 
     @Override
-    protected boolean isExist(Object objResume) {
+    protected boolean isExist(Resume objResume) {
         return objResume != null;
     }
 
     @Override
-    protected void doSave(Resume resume, Object objResume) {
+    protected void doSave(Resume resume, Resume objResume) {
         map.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected Resume doGet(Object objResume) {
-        return (Resume) objResume;
+    protected Resume doGet(Resume objResume) {
+        return objResume;
     }
 
     @Override
-    protected void doDelete(Object objResume) {
-        map.remove(((Resume) objResume).getUuid());
+    protected void doDelete(Resume objResume) {
+        map.remove(objResume.getUuid());
     }
 
     @Override
@@ -53,5 +53,15 @@ public class MapResumeStorage extends AbstractStorage {
     @Override
     public int size() {
         return map.size();
+    }
+
+    @Override
+    public void addResumeInfo(Resume objResume, String key, String value) {
+        map.get(objResume).addResumeContacts(key, value);
+    }
+
+    @Override
+    public void getInfo(Resume objResume) {
+        map.get(objResume).getContacts();
     }
 }

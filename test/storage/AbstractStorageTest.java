@@ -103,4 +103,18 @@ public abstract class AbstractStorageTest {
     public void setFullNameIncorrectNameException() {
         storage.save(new Resume("uuid5", null));
     }
+
+//        ----------------------------------------------
+
+    @Test
+    public void addInfo () {
+        storage.addResumeContacts(UUID_1, "e-mail", "alexshram@mail.ru");
+        storage.addResumeContacts(UUID_1, null, "github.com");
+    }
+
+    @Test
+    public void getInfo() {
+        storage.getResumeInfo(UUID_1);
+    }
+
 }
