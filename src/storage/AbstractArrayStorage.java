@@ -57,15 +57,21 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
-    @Override
-    public void addResumeInfo(Integer searchKey, String key, String value){
+/*    @Override
+    public void addResumeInfo(Integer searchKey, ContactType key, String value){
         storage[searchKey].addResumeContacts(key, value);
     }
 
     @Override
     public void getInfo(Integer searchKey) {
-        storage[searchKey].getContacts();
+        storage[searchKey].getResumeContact();
     }
+
+    @Override
+    public void addSectionData(Integer searchKey, SectionType sectionType, String info) {
+        storage[searchKey].setSectionData(sectionType, info);
+    }*/
+
 
     protected abstract Integer getSearchKey(String uuid);
 

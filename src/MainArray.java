@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 /**
- * Interactive test for storage.ArrayStorage implementation
+ * Interactive setSectionData for storage.ArrayStorage implementation
  * (just run, no need to understand)
  */
 

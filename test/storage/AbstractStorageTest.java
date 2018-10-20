@@ -2,11 +2,14 @@ package storage;
 
 import exception.ExistStorageException;
 import exception.NotExistStorageException;
+import model.ContactType;
 import model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -107,14 +110,26 @@ public abstract class AbstractStorageTest {
 //        ----------------------------------------------
 
     @Test
-    public void addInfo () {
-        storage.addResumeContacts(UUID_1, "e-mail", "alexshram@mail.ru");
-        storage.addResumeContacts(UUID_1, null, "github.com");
+    public void addContacts() {
+
+        storage.
+
+        storage.addResumeContacts(UUID_1, ContactType.PHONE, "+7(921) 855-0482");
+        storage.addResumeContacts(UUID_1, ContactType.SKYPE, "grigory.kislin");
     }
 
     @Test
-    public void getInfo() {
-        storage.getResumeInfo(UUID_1);
+    public void getContacts() {
+        storage.getResumeContacts(UUID_1);
     }
 
+    @Test
+    public void testInfoInput() {
+
+        List<String> list = new ArrayList<>();
+        list.add("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike");
+        list.add("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM");
+
+//        .addResumeSectionsData(UUID_1, SectionType.ACHIEVEMENT, list);
+    }
 }
