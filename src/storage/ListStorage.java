@@ -1,6 +1,5 @@
 package storage;
 
-import model.ContactType;
 import model.Resume;
 
 import java.util.ArrayList;
@@ -57,20 +56,4 @@ public class ListStorage extends AbstractStorage<Integer> {
     public int size() {
         return list.size();
     }
-
-    @Override
-    public void addResumeInfo(Integer objResume, ContactType key, String value) {
-        list.get(objResume).addResumeContacts(key, value);
-    }
-
-    @Override
-    public void getInfo(Integer objResume) {
-        list.get(objResume).getResumeContact();
-    }
-
-    @Override
-    public void addSectionData(Integer objResume) {
-        list.get(objResume).setSectionData();
-    }
-
 }

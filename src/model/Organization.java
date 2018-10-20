@@ -11,9 +11,9 @@ public class Organization {
     private final String description;
 
     public Organization(String name, String url, Date startDate, Date endDate, String position, String description) {
-        Objects.requireNonNull(startDate, "Field startDate mustn't be null. Please, fill it.");
-        Objects.requireNonNull(endDate, "Field endDate mustn't be null. Please, fill it.");
-        Objects.requireNonNull(position, "Field position mustn't be null. Please, fill it.");
+        Objects.requireNonNull(startDate, "startDate mustn't be null");
+        Objects.requireNonNull(endDate, "endDate mustn't be null");
+        Objects.requireNonNull(position, "position mustn't be null");
         this.homepage = new Link(name, url);
         this.startDate = startDate;
         this.endDate = endDate;

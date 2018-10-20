@@ -2,14 +2,11 @@ package storage;
 
 import exception.ExistStorageException;
 import exception.NotExistStorageException;
-import model.ContactType;
 import model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,7 +21,6 @@ public abstract class AbstractStorageTest {
     protected static final Resume RESUME_2 = new Resume(UUID_2, "Name2");
     protected static final Resume RESUME_3 = new Resume(UUID_3, "Name3");
     protected static final Resume RESUME_4 = new Resume(UUID_4, "Name4");
-
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -105,31 +101,5 @@ public abstract class AbstractStorageTest {
     @Test(expected = NullPointerException.class)
     public void setFullNameIncorrectNameException() {
         storage.save(new Resume("uuid5", null));
-    }
-
-//        ----------------------------------------------
-
-    @Test
-    public void addContacts() {
-
-        storage.
-
-        storage.addResumeContacts(UUID_1, ContactType.PHONE, "+7(921) 855-0482");
-        storage.addResumeContacts(UUID_1, ContactType.SKYPE, "grigory.kislin");
-    }
-
-    @Test
-    public void getContacts() {
-        storage.getResumeContacts(UUID_1);
-    }
-
-    @Test
-    public void testInfoInput() {
-
-        List<String> list = new ArrayList<>();
-        list.add("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike");
-        list.add("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM");
-
-//        .addResumeSectionsData(UUID_1, SectionType.ACHIEVEMENT, list);
     }
 }

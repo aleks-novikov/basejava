@@ -2,9 +2,7 @@ package storage;
 
 import exception.ExistStorageException;
 import exception.NotExistStorageException;
-import model.ContactType;
 import model.Resume;
-import model.SectionType;
 
 import java.util.Comparator;
 import java.util.List;
@@ -49,24 +47,6 @@ public abstract class AbstractStorage<SK> implements Storage {
         return list;
     }
 
-    public void addResumeContacts(String uuid, ContactType key, String value) {
-        LOG.info("addResumeContacts " + uuid);
-        SK searchKey = getExistedSearchKey(uuid);
-        addResumeInfo(searchKey, key, value);
-    }
-
-    public void getResumeContacts(String uuid) {
-        LOG.info("getResumeContact " + uuid);
-        SK searchKey = getExistedSearchKey(uuid);
-        getInfo(searchKey);
-    }
-
-    public void addResumeSectionsData (String uuid, SectionType sectionType, String info) {
-        LOG.info("addResumeSectionsData " + uuid);
-        SK searchKey = getExistedSearchKey(uuid);
-        addSectionData(searchKey, sectionType, info);
-    }
-
     private SK getExistedSearchKey(String uuid) {
         SK searchKey = getSearchKey(uuid);
         if (!isExist(searchKey)) {
@@ -84,12 +64,6 @@ public abstract class AbstractStorage<SK> implements Storage {
         }
         return searchKey;
     }
-
-    protected abstract void addSectionData(SK searchKey, SectionType sectionType, String info);
-
-    protected abstract void addResumeInfo(SK searchKey, ContactType key, String value);
-
-    protected abstract void getInfo(SK searchKey);
 
     protected abstract List<Resume> getAll();
 

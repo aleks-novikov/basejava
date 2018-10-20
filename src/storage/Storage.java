@@ -1,8 +1,6 @@
 package storage;
 
-import model.ContactType;
 import model.Resume;
-import model.SectionType;
 
 import java.util.List;
 
@@ -21,10 +19,4 @@ public interface Storage {
     List<Resume> getAllSorted();
 
     int size();
-
-    void addResumeContacts(String uuid, ContactType key, String info);
-
-    void getResumeContacts(String uuid);
-
-    void addResumeSectionsData(String uuid, SectionType sectionType, String info);
 }

@@ -7,11 +7,11 @@ public class ListSection extends AbstractSection {
     private final List<String> list;
 
     public ListSection(List<String> list) {
-        Objects.requireNonNull(list, "Field list mustn't be null. Please, fill it.");
+        Objects.requireNonNull(list, "list mustn't be null");
         this.list = list;
     }
 
-    public List<String> getList () {
+    public List<String> getList() {
         return list;
     }
 

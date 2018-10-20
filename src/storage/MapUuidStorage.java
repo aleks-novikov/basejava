@@ -1,6 +1,5 @@
 package storage;
 
-import model.ContactType;
 import model.Resume;
 
 import java.util.ArrayList;
@@ -54,20 +53,5 @@ public class MapUuidStorage extends AbstractStorage<String> {
     @Override
     public int size() {
         return map.size();
-    }
-
-    @Override
-    public void addResumeInfo(String objResume, ContactType key, String value) {
-        map.get(objResume).addResumeContacts(key, value);
-    }
-
-    @Override
-    public void getInfo(String objResume) {
-        map.get(objResume).getResumeContact();
-    }
-
-    @Override
-    public void addSectionData(String objResume) {
-        map.get(objResume).setSectionData();
     }
 }
