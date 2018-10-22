@@ -4,10 +4,22 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class ResumeInformationFilling {
     private static final String UUID_1 = "uuid1";
     private static final Resume RESUME = new Resume(UUID_1, "Новиков Александр");
+
+    private static void getResumeInformation(Resume resume) {
+        System.out.println(resume.getFullName());
+        for (Map.Entry<ContactType, String> entry : resume.getContactsCollection().entrySet()) {
+            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
+        }
+
+        for (Map.Entry<SectionType, AbstractSection> entry : resume.getSectionsCollection().entrySet()) {
+            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
+        }
+    }
 
     public static void main(String[] args) {
         RESUME.setContact(ContactType.PHONE, "952-345-54-67");
@@ -41,7 +53,7 @@ public class ResumeInformationFilling {
         List<Organization> organizationsList = new LinkedList<>();
         Organization organization = new Organization("Сбербанк", "https://www.sberbank.ru/ru/person",
                 LocalDate.of(2017, Month.AUGUST, 1), LocalDate.of(2018, Month.AUGUST, 13), "Программист VBA",
-                "Разрабатывал программы на VBA для автоматизации сбора и обработки данных в MS Excel, Access, Outlook");
+                "Разрабатывал программы на VBA для автоматизации сбора и обработки данных в MS Excel, Access, Outlook.");
         organizationsList.add(organization);
 
         organization = new Organization("Ниеншанц-Автоматика", "https://nnz-ipc.ru",
@@ -58,10 +70,10 @@ public class ResumeInformationFilling {
 
         organization = new Organization("Санкт-Петербургский политехнический университет Петра Великого", "http://www.spbstu.ru",
                 LocalDate.of(2014, Month.SEPTEMBER, 1), LocalDate.of(2018, Month.JUNE, 14),
-                "Высшая школа управления и бизнеса, Информатик-экономист",  "");
+                "Высшая школа управления и бизнеса, Информатик-экономист", "");
         educationList.add(organization);
         RESUME.setSection(SectionType.EDUCATION, new OrganizationSection(educationList));
 
-        RESUME.getResumeInformation(UUID_1);
+        getResumeInformation(RESUME);
     }
 }

@@ -47,15 +47,12 @@ public class Resume implements Comparable<Resume> {
         sections.put(type, section);
     }
 
-    public void getResumeInformation(String uuid) {
-        System.out.println(fullName);
-        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
-        }
+    public Map<ContactType, String> getContactsCollection() {
+        return contacts;
+    }
 
-        for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
-        }
+    public Map<SectionType, AbstractSection> getSectionsCollection() {
+        return sections;
     }
 
     @Override
