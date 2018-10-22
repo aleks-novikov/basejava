@@ -1,16 +1,17 @@
 package model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Organization {
     private final Link homepage;
-    private final Date startDate;
-    private final Date endDate;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
     private final String position;
     private final String description;
 
-    public Organization(String name, String url, Date startDate, Date endDate, String position, String description) {
+    public Organization(String name, String url, LocalDate startDate, LocalDate endDate, String position, String description) {
+        Objects.requireNonNull(name, "name mustn't be null");
         Objects.requireNonNull(startDate, "startDate mustn't be null");
         Objects.requireNonNull(endDate, "endDate mustn't be null");
         Objects.requireNonNull(position, "position mustn't be null");
@@ -21,11 +22,11 @@ public class Organization {
         this.description = description;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 

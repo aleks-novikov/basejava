@@ -12,18 +12,6 @@ public class Resume implements Comparable<Resume> {
     private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
     private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
-    public String getContact(ContactType type) {
-        return contacts.get(type);
-    }
-
-    public AbstractSection getSection(SectionType type) {
-        return sections.get(type);
-    }
-
-    public Resume(String fullName) {
-        this(UUID.randomUUID().toString(), fullName);
-    }
-
     public Resume(String uuid, String fullName) {
         Objects.requireNonNull(uuid, "uuid mustn't be null");
         Objects.requireNonNull(fullName, "fullName mustn't be null");
@@ -37,6 +25,37 @@ public class Resume implements Comparable<Resume> {
 
     public String getFullName() {
         return fullName;
+    }
+
+    public Resume(String fullName) {
+        this(UUID.randomUUID().toString(), fullName);
+    }
+
+    public String getContact(ContactType type) {
+        return contacts.get(type);
+    }
+
+    public void setContact(ContactType type, String contact) {
+        contacts.put(type, contact);
+    }
+
+    public AbstractSection getSection(SectionType type) {
+        return sections.get(type);
+    }
+
+    public void setSection(SectionType type, AbstractSection section) {
+        sections.put(type, section);
+    }
+
+    public void getResumeInformation(String uuid) {
+        System.out.println(fullName);
+        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
+        }
+
+        for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
+        }
     }
 
     @Override
