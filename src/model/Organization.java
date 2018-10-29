@@ -1,41 +1,50 @@
 package model;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class Organization {
     private final Link homepage;
-    private final LocalDate startDate;
-    private final LocalDate endDate;
-    private final String position;
-    private final String description;
+    private final List<LocalDate> startDate;
+    private final List<LocalDate> endDate;
+    private final List<String> position;
+    private final List<String> description;
 
-    public Organization(String name, String url, LocalDate startDate, LocalDate endDate, String position, String description) {
+    public Organization(String name, String url) {
         Objects.requireNonNull(name, "name mustn't be null");
+        this.homepage = new Link(name, url);
+        this.startDate = new LinkedList<>();
+        this.endDate = new LinkedList<>();
+        this.position = new LinkedList<>();
+        this.description = new LinkedList<>();
+    }
+
+    public void addOrganisationInfo(LocalDate startDate, LocalDate endDate, String position, String description) {
         Objects.requireNonNull(startDate, "startDate mustn't be null");
         Objects.requireNonNull(endDate, "endDate mustn't be null");
         Objects.requireNonNull(position, "position mustn't be null");
-        this.homepage = new Link(name, url);
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.position = position;
-        this.description = description;
+        this.startDate.add(startDate);
+        this.endDate.add(endDate);
+        this.position.add(position);
+        this.description.add(description);
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDate getStartDate(int index) {
+        return startDate.get(index);
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
+    public LocalDate getEndDate(int index) {
+        return endDate.get(index);
     }
 
-    public String getPosition() {
-        return position;
+    public String getPosition(int index) {
+        return position.get(index);
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescription(int index) {
+        return description.get(index);
     }
 
     @Override
@@ -62,7 +71,10 @@ public class Organization {
 
     @Override
     public String toString() {
-        return "\n" + homepage + "\n" + startDate + " - " + endDate + ", " + position + ", " + description;
-//        return startDate + " - " + endDate + ", " + position + ", " + description + "\n";
+        StringBuilder sb = new StringBuilder("\n" + homepage);
+        for (int i = 0; i < position.size(); i++) {
+            sb.append(" " + "\n" + startDate.get(i) + " - " + endDate.get(i) + ", " + position.get(i) + ", " + description.get(i));
+        }
+        return sb.toString();
     }
 }

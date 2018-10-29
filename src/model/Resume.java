@@ -47,11 +47,11 @@ public class Resume implements Comparable<Resume> {
         sections.put(type, section);
     }
 
-    public Map<ContactType, String> getContactsCollection() {
+    public Map<ContactType, String> getContacts() {
         return contacts;
     }
 
-    public Map<SectionType, AbstractSection> getSectionsCollection() {
+    public Map<SectionType, AbstractSection> getSections() {
         return sections;
     }
 
