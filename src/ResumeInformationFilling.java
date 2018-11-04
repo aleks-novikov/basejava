@@ -41,13 +41,7 @@ public class ResumeInformationFilling {
         List<String> skills = new LinkedList<>();
         skills.add("Intellij IDEA");
         skills.add("Git");
-        skills.add("HTML/CSS");
-        skills.add("XML");
-        skills.add("SQL");
         skills.add("Java 8 SE");
-        skills.add("ООП");
-        skills.add("JUnit");
-        skills.add("Английский язык уровня Intermediate");
         RESUME.setSection(SectionType.QUALIFICATIONS, new ListSection(skills));
     }
 

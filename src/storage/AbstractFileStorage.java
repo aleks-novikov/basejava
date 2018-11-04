@@ -1,39 +1,31 @@
 package storage;
 
-import model.AbstractSection;
-import model.ContactType;
+import exception.StorageException;
 import model.Resume;
-import model.SectionType;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
-public class AbstractFileStorage extends AbstractStorage<File> {
+public abstract class AbstractFileStorage extends AbstractStorage<File> {
+    protected BufferedWriter writer;
     protected final File dir = new File(System.getProperty("System.get") + "/ResumeStorage/");
-    protected File file;
-    protected FileWriter writer;
-    protected String fullFilePath;
-    protected final String separator = System.getProperty("line.separator");
 
     public int size() {
-        String[] list = dir.list();
-        if (list == null) {
-            throw
-        }
         return Objects.requireNonNull(dir.list()).length;
     }
 
     public void clear() {
         File[] files = dir.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                file.delete();
-            }
+        if (files == null) {
+            throw new StorageException("File storage is null!", dir.getName());
+        }
+        for (File file : files) {
+            file.delete();
         }
     }
 
@@ -43,73 +35,58 @@ public class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void doSave(Resume resume, File fileName) {
-        if (!fileName.exists()) {
-            try {
-                fileName.createNewFile();
-                writer = new FileWriter(fileName, false);
-                for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()) {
-                    writer.write(entry.getKey() + ": " + entry.getValue() + separator);
-                }
+    protected void doDelete(File file) {
+        if (isExist(file)) {
+            file.delete();
+        } else {
+            throw new StorageException("File doesn't exist!", file.getName());
+        }
+    }
 
-                for (Map.Entry<SectionType, AbstractSection> entry : resume.getSections().entrySet()) {
-                    writer.write(entry.getKey() + ": " + entry.getValue() + separator);
-                }
-                writer.flush();
+    @Override
+    protected void doUpdate(Resume resumeInfo, File file) {
+        if (isExist(file)) {
+            try {
+                writer = new BufferedWriter(new FileWriter(file, true));
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
                 try {
+                    writer.flush();
                     writer.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+        } else {
+            throw new StorageException("File doesn't exist!", file.getName());
         }
     }
 
-    @Override
-    protected void doDelete(File file) {
-        if (file.exists()) {
-            file.delete();
+    public List<Resume> getAll() {
+        File files[] = dir.listFiles();
+        if (files == null) {
+            throw new StorageException("File storage is null!", dir.getName());
         }
+        List<Resume> list = new ArrayList<>(files.length);
+        for (File file : files) {
+            list.add(doGet(file));
+        }
+        return list;
     }
 
     @Override
     protected Resume doGet(File file) {
         try {
             return doRead(file);
-        }
-        if (isExist(file)) {
-
-            return
-        }
-
-//        for (File file : Objects.requireNonNull(dir.listFiles())) {
-//            if (file.getName().equals(uuid)) {
-//                return file;
-//            }
-//        }
-        return null;
-
-    }
-
-    @Override
-    protected void doUpdate(String newInfo, String uuid) {
-        File curFile = doGet(uuid);
-        if (curFile != null) {
-            //доработать
+        } catch (IOException e) {
+            throw  new StorageException("File reading error!", file.getName());
         }
     }
 
-    public List<Resume> getAll() {
-        return Arrays.asList(Arrays.copyOf(storage, size));
-    }
+    protected abstract File getSearchKey(String uuid);
 
-    protected abstract Integer getSearchKey(String uuid);
+    protected abstract void doWrite(Resume resume, File file) throws IOException;
 
-    protected abstract void resumeSave(int index, Resume resume);
-
-    protected abstract void resumeDelete(int index);
+    protected abstract Resume doRead(File file) throws IOException;
 }
-

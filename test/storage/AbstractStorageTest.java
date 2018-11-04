@@ -27,36 +27,26 @@ public abstract class AbstractStorageTest {
     protected static final Resume RESUME_3 = new Resume(UUID_3, "Name3");
     protected static final Resume RESUME_4 = new Resume(UUID_4, "Name4");
 
-    static class ResumeTestData {
-        private void addInfo() {
-            Resume resume = new Resume(UUID_1, "Новиков Александр");
+    public static class ResumeTestData {
+        protected static Resume addResumeInfo() {
+            Resume resume = new Resume("uuid5", "Новиков Александр");
             resume.setContact(ContactType.PHONE, "952-345-54-67");
             resume.setContact(ContactType.SKYPE, "alex-nov");
-
             resume.setSection(SectionType.OBJECTIVE, new TextSection("Junior Java-разработчик"));
             resume.setSection(SectionType.PERSONAL, new TextSection("Ответственность, стремление к постоянному развитию и упорство при достижении поставленных целей."));
-            resume.setSection(SectionType.ACHIEVEMENT, new ListSection("2018 г. - разрабатываю Web-приложение База данных резюме на курсе baseJava.", "2017-2018 гг. - в процессе работы в Сбербанке создал несколько проектов для сбора и обработки данных на языке VBA."));
-
-            List<String> skills = new LinkedList<>();
-            skills.add("Intellij IDEA");
-            skills.add("Git");
-            skills.add("Java 8 SE");
-            skills.add("ООП");
-            skills.add("JUnit");
-            resume.setSection(SectionType.QUALIFICATIONS, new ListSection(skills));
+            resume.setSection(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList(
+                    "2018 г. - разрабатываю Web-приложение База данных резюме на курсе baseJava.",
+                    "2017-2018 гг. - в процессе работы в Сбербанке создал несколько проектов для сбора и обработки данных на языке VBA.")));
+            resume.setSection(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList("Java 8 SE", "Intellij IDEA", "Git")));
 
             List<Organization> organizationsList = new LinkedList<>();
-
             Organization organization = new Organization("Сбербанк", "https://www.sberbank.ru/ru/person");
             organization.addOrganisationInfo(LocalDate.of(2017, Month.AUGUST, 1), LocalDate.of(2018, Month.AUGUST, 13),
                     "Программист VBA", "Разрабатывал программы на VBA для автоматизации сбора и обработки данных в MS Excel, Access, Outlook.");
             organizationsList.add(organization);
-
             organization = new Organization("Ниеншанц-Автоматика", "https://nnz-ipc.ru");
             organization.addOrganisationInfo(LocalDate.of(2017, Month.JUNE, 19), LocalDate.of(2017, Month.JUNE, 30),
                     "Администратор баз данных", "За 2 недели обработал около 20 000 наименований товаров в Excel.");
-            organization.addOrganisationInfo(LocalDate.of(2016, Month.JUNE, 15), LocalDate.of(2016, Month.JUNE, 29),
-                    "Администратор баз данных", "За 2 недели завёл и разместил более 800 товарных карточек на сайте компании.");
             organizationsList.add(organization);
 
             resume.setSection(SectionType.EXPERIENCE, new OrganizationSection(organizationsList));
@@ -72,9 +62,10 @@ public abstract class AbstractStorageTest {
                     "Высшая школа управления и бизнеса, Информатик-экономист", "");
             educationList.add(organization);
             resume.setSection(SectionType.EDUCATION, new OrganizationSection(educationList));
+            return resume;
         }
 
-        private void getResumeInformation(Resume resume) {
+        protected static void getResumeInfo(Resume resume) {
             System.out.println(resume.getFullName());
             for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()) {
                 System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
@@ -84,6 +75,11 @@ public abstract class AbstractStorageTest {
                 System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
             }
         }
+    }
+
+    static {
+        System.out.println("Тест заполнения резюме данными:\n");
+        ResumeTestData.getResumeInfo(ResumeTestData.addResumeInfo());
     }
 
     protected AbstractStorageTest(Storage storage) {
