@@ -1,51 +1,26 @@
+package storage;
+
 import model.*;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class ResumeInformationFilling {
-    private static final String UUID_1 = "uuid1";
-    private static final Resume RESUME = new Resume(UUID_1, "Новиков Александр");
+public class ResumeTestData {
+    protected static Resume addResumeInfo() {
+        Resume resume = new Resume("uuid5", "Новиков Александр");
+        resume.setContact(ContactType.PHONE, "952-345-54-67");
+        resume.setContact(ContactType.SKYPE, "alex-nov");
+        resume.setSection(SectionType.OBJECTIVE, new TextSection("Junior Java-разработчик"));
+        resume.setSection(SectionType.PERSONAL, new TextSection("Ответственность, стремление к постоянному развитию и упорство при достижении поставленных целей."));
+        resume.setSection(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList(
+                "2018 г. - разрабатываю Web-приложение База данных резюме на курсе baseJava.",
+                "2017-2018 гг. - в процессе работы в Сбербанке создал несколько проектов для сбора и обработки данных на языке VBA.")));
+        resume.setSection(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList("Java 8 SE", "Intellij IDEA", "Git")));
 
-    public static void main(String[] args) {
-        setContacts();
-        setTextSection();
-        setListSection();
-        setOrganisationsSection();
-        getResumeInformation(RESUME);
-    }
-
-    private static void setContacts() {
-        RESUME.setContact(ContactType.PHONE, "952-345-54-67");
-        RESUME.setContact(ContactType.SKYPE, "alex-nov");
-        Link link = new Link("https://www.linkedin.com/in/александр-новиков-b0326116a/", "linkedin");
-        RESUME.setContact(ContactType.LINKEDIN, link.getName());
-        link = new Link("https://github.com/alexNov13/basejava", "github");
-        RESUME.setContact(ContactType.GITHUB, link.getName());
-    }
-
-    private static void setTextSection() {
-        RESUME.setSection(SectionType.OBJECTIVE, new TextSection("Junior Java-разработчик"));
-        RESUME.setSection(SectionType.PERSONAL, new TextSection("Ответственность, стремление к постоянному развитию и упорство при достижении поставленных целей."));
-    }
-
-    private static void setListSection() {
-        List<String> achievements = new LinkedList<>();
-        achievements.add("2018 г. - разрабатываю Web-приложение База данных резюме на курсе baseJava.");
-        achievements.add("2017-2018 гг. - в процессе работы в Сбербанке создал несколько проектов для сбора и обработки данных на языке VBA.");
-        RESUME.setSection(SectionType.ACHIEVEMENT, new ListSection(achievements));
-
-        List<String> skills = new LinkedList<>();
-        skills.add("Intellij IDEA");
-        skills.add("Git");
-        skills.add("Java 8 SE");
-        RESUME.setSection(SectionType.QUALIFICATIONS, new ListSection(skills));
-    }
-
-    private static void setOrganisationsSection() {
         List<Organization> organizationsList = new LinkedList<>();
 
         Organization organization = new Organization("Сбербанк", "https://www.sberbank.ru/ru/person");
@@ -60,7 +35,7 @@ public class ResumeInformationFilling {
                 "Администратор баз данных", "За 2 недели завёл и разместил более 800 товарных карточек на сайте компании.");
         organizationsList.add(organization);
 
-        RESUME.setSection(SectionType.EXPERIENCE, new OrganizationSection(organizationsList));
+        resume.setSection(SectionType.EXPERIENCE, new OrganizationSection(organizationsList));
         List<Organization> educationList = new LinkedList<>();
         organization = new Organization("baseJava", "http://javaops.ru/reg/basejava");
         organization.addOrganizationInfo(LocalDate.of(2018, Month.SEPTEMBER, 10), LocalDate.now(),
@@ -72,10 +47,11 @@ public class ResumeInformationFilling {
         organization.addOrganizationInfo(LocalDate.of(2014, Month.SEPTEMBER, 1), LocalDate.of(2018, Month.JUNE, 14),
                 "Высшая школа управления и бизнеса, Информатик-экономист", "");
         educationList.add(organization);
-        RESUME.setSection(SectionType.EDUCATION, new OrganizationSection(educationList));
+        resume.setSection(SectionType.EDUCATION, new OrganizationSection(educationList));
+        return resume;
     }
 
-    private static void getResumeInformation(Resume resume) {
+    protected static void getResumeInfo(Resume resume) {
         System.out.println(resume.getFullName());
         for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()) {
             System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
