@@ -1,11 +1,14 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Organization {
+public class Organization implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final Link homepage;
     private List<OrganizationInfo> list = new ArrayList<>();
 
@@ -14,11 +17,13 @@ public class Organization {
         this.homepage = new Link(name, url);
     }
 
-    public void addOrganizationInfo (LocalDate startDate, LocalDate endDate, String position, String description) {
+    public void addOrganizationInfo(LocalDate startDate, LocalDate endDate, String position, String description) {
         list.add(new OrganizationInfo(startDate, endDate, position, description));
     }
 
-    public class OrganizationInfo {
+    public class OrganizationInfo implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         private final LocalDate startDate;
         private final LocalDate endDate;
         private final String position;

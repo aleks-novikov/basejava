@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ResumeTestData {
-    protected static Resume addResumeInfo() {
-        Resume resume = new Resume("uuid5", "Новиков Александр");
+    protected static Resume addResumeInfo(Resume resume) {
         resume.setContact(ContactType.PHONE, "952-345-54-67");
         resume.setContact(ContactType.SKYPE, "alex-nov");
         resume.setSection(SectionType.OBJECTIVE, new TextSection("Junior Java-разработчик"));

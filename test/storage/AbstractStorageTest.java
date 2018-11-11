@@ -6,11 +6,13 @@ import model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.Arrays;
-
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
+    protected static final File STORAGE_DIR = new File("G:\\Java\\Projects\\basejava\\storage");
+
     protected Storage storage;
     protected int oldStorageSize;
     protected static final String UUID_1 = "uuid1";
@@ -24,7 +26,9 @@ public abstract class AbstractStorageTest {
 
     static {
         System.out.println("Тест заполнения резюме данными:\n");
-        ResumeTestData.getResumeInfo(ResumeTestData.addResumeInfo());
+        ResumeTestData.getResumeInfo(ResumeTestData.addResumeInfo(RESUME_1));
+        ResumeTestData.getResumeInfo(ResumeTestData.addResumeInfo(RESUME_2));
+        ResumeTestData.getResumeInfo(ResumeTestData.addResumeInfo(RESUME_3));
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -86,7 +90,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void update() {
+    public void update() throws Exception {
         Resume newResume = new Resume(UUID_1, "NewName");
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_1));
