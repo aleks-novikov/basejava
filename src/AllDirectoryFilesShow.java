@@ -15,11 +15,9 @@ public class AllDirectoryFilesShow {
         int filesCounter = 0;
         Set<File> files = new HashSet<>(Arrays.asList(Objects.requireNonNull(dir.listFiles())));
         Set<File> folders = new HashSet<>();
-        Iterator<File> iterator = files.iterator();
 
         //вывод списка файлов данного каталога
-        while (iterator.hasNext()) {
-            file = iterator.next();
+        for (File file: files) {
             if (file.isFile()) {
                 filesCounter++;
                 if (filesCounter == 1) {  //если в нём есть хотя бы 1 файл, выводим имя каталога
@@ -32,15 +30,11 @@ public class AllDirectoryFilesShow {
         }
 
         //вывод списка файлов в каждом отд. каталоге
-        iterator = folders.iterator();
-        while (iterator.hasNext()) {
-            file = iterator.next();
+        for (File folder: folders) {
             if (nestingLevel < 2) {
                 nestingLevel++;
-                Iterator<File> savedIterator = iterator;
-                filesShow(file);  //переход в каталог на уровень ниже
+                filesShow(folder);  //переход в каталог на уровень ниже
                 nestingLevel--;
-                iterator = savedIterator;
             }
         }
     }
@@ -49,7 +43,7 @@ public class AllDirectoryFilesShow {
         int folderPathLength = folderPath.getAbsolutePath().length();
         StringBuilder sb = new StringBuilder(folderPathLength);
         for (int i = 0; i < folderPathLength; i++) {
-            sb.append("-");
+            sb.append(" ");
         }
         return sb.toString();
     }
