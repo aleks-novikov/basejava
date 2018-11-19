@@ -2,7 +2,7 @@ package storage;
 
 import exception.StorageException;
 import model.Resume;
-import serialization.StreamSerializer;
+import storage.serialization.StreamSerializer;
 
 import java.io.*;
 import java.nio.file.Files;

@@ -1,6 +1,6 @@
 package storage;
 
-import serialization.ObjectStreamSerializer;
+import storage.serialization.ObjectStreamSerializer;
 
 public class ObjectFileStorageTest extends AbstractStorageTest {
     public ObjectFileStorageTest() {
