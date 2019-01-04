@@ -10,15 +10,15 @@ import java.util.List;
 import java.util.Map;
 
 public class ResumeTestData {
-    protected static Resume addResumeInfo(Resume resume) {
-        resume.setContact(ContactType.PHONE, "952-345-54-67");
-        resume.setContact(ContactType.SKYPE, "alex-nov");
-        resume.setSection(SectionType.OBJECTIVE, new TextSection("Junior Java-разработчик"));
-        resume.setSection(SectionType.PERSONAL, new TextSection("Ответственность, стремление к постоянному развитию и упорство при достижении поставленных целей."));
-        resume.setSection(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList(
+    public static Resume addResumeInfo(Resume resume) {
+        resume.addContact(ContactType.PHONE, "952-345-54-67");
+        resume.addContact(ContactType.SKYPE, "alex-nov");
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("Junior Java-разработчик"));
+        resume.addSection(SectionType.PERSONAL, new TextSection("Ответственность, стремление к постоянному развитию и упорство при достижении поставленных целей."));
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList(
                 "2018 г. - разрабатываю Web-приложение База данных резюме на курсе baseJava.",
                 "2017-2018 гг. - в процессе работы в Сбербанке создал несколько проектов для сбора и обработки данных на языке VBA.")));
-        resume.setSection(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList("Java 8 SE", "Intellij IDEA", "Git")));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList("Java 8 SE", "Intellij IDEA", "Git")));
 
         List<Organization> organizationsList = new LinkedList<>();
 
@@ -34,7 +34,7 @@ public class ResumeTestData {
                 "Администратор баз данных", "За 2 недели завёл и разместил более 800 товарных карточек на сайте компании.");
         organizationsList.add(organization);
 
-        resume.setSection(SectionType.EXPERIENCE, new OrganizationSection(organizationsList));
+        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(organizationsList));
         List<Organization> educationList = new LinkedList<>();
         organization = new Organization("baseJava", "http://javaops.ru/reg/basejava");
         organization.addOrganizationInfo(LocalDate.of(2018, Month.SEPTEMBER, 10), LocalDate.now(),
@@ -46,11 +46,11 @@ public class ResumeTestData {
         organization.addOrganizationInfo(LocalDate.of(2014, Month.SEPTEMBER, 1), LocalDate.of(2018, Month.JUNE, 14),
                 "Высшая школа управления и бизнеса, Информатик-экономист", "");
         educationList.add(organization);
-        resume.setSection(SectionType.EDUCATION, new OrganizationSection(educationList));
+        resume.addSection(SectionType.EDUCATION, new OrganizationSection(educationList));
         return resume;
     }
 
-    protected static void getResumeInfo(Resume resume) {
+    public static void getResumeInfo(Resume resume) {
         System.out.println(resume.getFullName());
         for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()) {
             System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());

@@ -3,11 +3,15 @@ package storage;
 import exception.ExistStorageException;
 import exception.NotExistStorageException;
 import model.Resume;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import util.ResumeTestData;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
@@ -74,7 +78,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void get() {
-        assertEquals(RESUME_1, storage.get(UUID_1));
+        Resume resume1 = RESUME_1;
+        Resume resume2 = storage.get(UUID_1);
+        Assert.assertEquals(resume1, resume2);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -103,7 +109,9 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAll() {
         assertEquals(3, storage.getAllSorted().size());
-        assertEquals(Arrays.asList(RESUME_1, RESUME_2, RESUME_3), storage.getAllSorted());
+        List<Resume> list = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
+        List<Resume> list2 = storage.getAllSorted();
+        assertEquals(list, list2);
     }
 
     @Test(expected = NullPointerException.class)
