@@ -7,7 +7,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
@@ -15,7 +17,6 @@ public class Organization implements Serializable {
 
     private Link homePage;
     private List<Position> positions = new ArrayList<>();
-//    private Set<Position> positions = new HashSet<>();
 
     public Organization() {
     }
@@ -34,6 +35,25 @@ public class Organization implements Serializable {
 
     public void addOrganizationInfo(LocalDate startDate, LocalDate endDate, String title, String description) {
         positions.add(new Position(startDate, endDate, title, description));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Organization that = (Organization) o;
+        return Objects.equals(homePage, that.homePage) &&
+                Objects.equals(positions, that.positions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(homePage, positions);
+    }
+
+    @Override
+    public String toString() {
+        return homePage + "\t" + positions + "\t";
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -79,26 +99,21 @@ public class Organization implements Serializable {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            Position oi = (Position) o;
-            return startDate.equals(oi.startDate) &&
-                    endDate.equals(oi.endDate) &&
-                    title.equals(oi.title) &&
-                    description.equals(oi.description);
+            Position position = (Position) o;
+            return Objects.equals(startDate, position.startDate) &&
+                    Objects.equals(endDate, position.endDate) &&
+                    Objects.equals(title, position.title) &&
+                    Objects.equals(description, position.description);
         }
 
         @Override
         public int hashCode() {
             return Objects.hash(startDate, endDate, title, description);
         }
-    }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("\n" + homePage);
-        for (int i = 0; i < positions.size(); i++) {
-            sb.append("\n" + positions.get(i).startDate + " - " + positions.get(i).endDate
-                    + ", " + positions.get(i).title + ", " + positions.get(i).description);
+        @Override
+        public String toString() {
+            return startDate + "\t" + endDate + "\t" + title +  "\t" + description;
         }
-        return sb.toString();
     }
 }

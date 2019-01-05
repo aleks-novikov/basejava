@@ -42,68 +42,90 @@ public class DataStreamSerializer implements StreamSerializer {
             for (int i = 0; i < size; i++) {
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
             }
-
-            //чтение секций
-            size = dis.readInt();
-            AbstractSection as = null;
-            for (int i = 0; i < size; i++) {
-                String section = dis.readUTF();
-
-                if (section.equals("next")) {
-                    section = dis.readUTF();
-                }
-
-                switch (section) {
-                    case "OBJECTIVE":
-                    case "PERSONAL":
-                        as = new TextSection(dis.readUTF());
-                        break;
-                    case "ACHIEVEMENT":
-                    case "QUALIFICATIONS":
-                        List<String> info = new ArrayList<>();
-                        do {
-                            info.add(dis.readUTF());
-                        } while (!dis.readUTF().equals("next"));
-
-                        as = new ListSection(info);
-                        break;
-                    case "EXPERIENCE":
-                    case "EDUCATION":
-                        String[] dataArray = dis.readUTF().split("\n");
-                        Organization organization = null;
-                        List<Organization> organizationsList = new LinkedList<>();
-
-                        for (int j = 1; j < dataArray.length; j++) {
-                            String data = dataArray[j];
-                            if (!data.startsWith("2")) {
-                                int position = data.indexOf(",");
-                                String name = data.substring(0, position);
-                                String url = data.substring(position + 2);
-                                organization = new Organization(name, url);
-                            }
-                            if (data.startsWith("2")) {
-                                int position = data.indexOf(" - ");
-                                LocalDate startDate = getDate(data, 0, position);
-                                LocalDate endDate = getDate(data, position + 3, data.indexOf(","));
-                                position = data.indexOf(endDate.toString()) + endDate.toString().length() + 2;
-                                String title = data.substring(position, data.indexOf(",", position + 3));
-                                String description = data.substring(data.indexOf(title) + title.length() + 2);
-                                organization.addOrganizationInfo(startDate, endDate, title, description);
-
-                                if (!(new HashSet<>(organizationsList).contains(organization))) {
-                                    organizationsList.add(organization);
-                                }
-                            }
-                        }
-                        as = new OrganizationSection(organizationsList);
-                }
-                resume.addSection(SectionType.valueOf(section), as);
-            }
+            contactsRead(resume, dis);
             return resume;
         }
     }
 
-    private LocalDate getDate(String data, int from, int to) {
-        return LocalDate.parse(data.substring(from, to));
+    private void contactsRead(Resume resume, DataInputStream dis) throws IOException {
+        int size = dis.readInt();
+        AbstractSection as = null;
+
+        for (int i = 0; i < size; i++) {
+            String line = dis.readUTF();
+            if (line.equals("next")) {
+                line = dis.readUTF();
+            }
+
+            SectionType section = SectionType.valueOf(line);
+            switch (section) {
+                case PERSONAL:
+                case OBJECTIVE:
+                    as = new TextSection(dis.readUTF());
+                    break;
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    List<String> info = new ArrayList<>();
+                    do {
+                        info.add(dis.readUTF());
+                    } while (!dis.readUTF().equals("next"));
+                    as = new ListSection(info);
+                    break;
+                case EXPERIENCE:
+                case EDUCATION:
+                    String allData = dis.readUTF().replace("[", "").replace("]", "");
+                    as = addInfo(allData);
+            }
+            resume.addSection(section, as);
+        }
+    }
+
+    private AbstractSection addInfo(String allData) {
+        List<String> dataList = new LinkedList<>(Arrays.asList(allData.split("\t")));
+        Organization organization = null;
+        List<Organization> organizationsList = new LinkedList<>();
+
+        int i = 0;
+        do {
+            String url = null;
+            String description = null;
+            String name = dataList.get(i);
+
+            if (name.startsWith(", 2") || name.startsWith("2")) {
+                i = i - 2;
+            } else {
+                url = dataList.get(i + 1);
+            }
+            if (name.startsWith(", ")) {
+                name = name.substring(2);
+            }
+
+            LocalDate startDate = getDate(dataList.get(i + 2));
+            LocalDate endDate = getDate(dataList.get(i + 3));
+            String position = dataList.get(i + 4);
+
+            //поле description может быть не заполнено
+            if (i + 5 < dataList.size()) {
+                description = dataList.get(i + 5);
+            }
+            if (url != null) {
+                organization = new Organization(name, url);
+            }
+            organization.addOrganizationInfo(startDate, endDate, position, description);
+
+            if (!(new HashSet<>(organizationsList).contains(organization))) {
+                organizationsList.add(organization);
+            }
+
+            i += 6;
+        } while (i < dataList.size());
+        return new OrganizationSection(organizationsList);
+    }
+
+    private LocalDate getDate(String data) {
+        if (data.startsWith(", ")) {
+            data = data.replace(", ", "");
+        }
+        return LocalDate.parse(data);
     }
 }

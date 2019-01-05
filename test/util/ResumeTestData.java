@@ -29,7 +29,7 @@ public class ResumeTestData {
 
         organization = new Organization("Ниеншанц-Автоматика", "https://nnz-ipc.ru");
         organization.addOrganizationInfo(LocalDate.of(2017, Month.JUNE, 19), LocalDate.of(2017, Month.JUNE, 30),
-                "Администратор баз данных", "За 2 недели обработал около 20 000 наименований товаров в Excel.");
+                "Администратор баз данных", "За 2 недели обработал около 20 000 наименований товаров в Excel.\t");
         organization.addOrganizationInfo(LocalDate.of(2016, Month.JUNE, 15), LocalDate.of(2016, Month.JUNE, 29),
                 "Администратор баз данных", "За 2 недели завёл и разместил более 800 товарных карточек на сайте компании.");
         organizationsList.add(organization);
