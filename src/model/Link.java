@@ -49,6 +49,6 @@ public class Link implements Serializable {
 
     @Override
     public String toString() {
-        return name + "\t" + url;
+        return name + ", " + url;
     }
 }

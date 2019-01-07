@@ -4,7 +4,9 @@ import model.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class DataStreamSerializer implements StreamSerializer {
     public void doWrite(Resume resume, OutputStream os) throws IOException {
@@ -23,10 +25,46 @@ public class DataStreamSerializer implements StreamSerializer {
             //запись в файл остальных секций
             Map<SectionType, AbstractSection> sections = resume.getSections();
             dos.writeInt(sections.size());
+
             for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
                 dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue().toString());
-                dos.writeUTF("next");
+
+                switch (entry.getKey()) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        dos.writeUTF(entry.getValue().toString());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        ListSection ls = (ListSection) entry.getValue();
+                        List<String> values = ls.getList();
+                        dos.writeInt(values.size());
+
+                        for (String data : values) {
+                            dos.writeUTF(data);
+                        }
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        OrganizationSection orgSec = (OrganizationSection) entry.getValue();
+                        List<Organization> organisations = orgSec.getOrganisations();
+
+                        //число организаций для последующего чтения
+                        dos.writeInt(organisations.size());
+
+                        for (Organization o : organisations) {
+                            dos.writeUTF(o.getHomePage().getName());
+                            dos.writeUTF(o.getHomePage().getUrl());
+                            dos.writeInt(o.getPositions().size());   //число позиций данной организации для последующего чтения
+
+                            for (Organization.Position position : o.getPositions()) {
+                                dos.writeUTF(position.getStartDate().toString());
+                                dos.writeUTF(position.getEndDate().toString());
+                                dos.writeUTF(position.getTitle());
+                                dos.writeUTF(position.getDescription());
+                            }
+                        }
+                }
             }
         }
     }
@@ -37,95 +75,65 @@ public class DataStreamSerializer implements StreamSerializer {
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
 
-            int size = dis.readInt();  //число записанных контактов
-            //чтение контактов
-            for (int i = 0; i < size; i++) {
+            int size = dis.readInt();   //число записанных ранее контактов
+            for (int i = 0; i < size; i++) {    //чтение контактов
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
             }
-            contactsRead(resume, dis);
+
+            sectionsDataRead(resume, dis);
             return resume;
         }
     }
 
-    private void contactsRead(Resume resume, DataInputStream dis) throws IOException {
+    private void sectionsDataRead(Resume resume, DataInputStream dis) throws IOException {
         int size = dis.readInt();
-        AbstractSection as = null;
+        AbstractSection sectionData = null;
 
         for (int i = 0; i < size; i++) {
-            String line = dis.readUTF();
-            if (line.equals("next")) {
-                line = dis.readUTF();
-            }
-
-            SectionType section = SectionType.valueOf(line);
-            switch (section) {
+            SectionType sectionType = SectionType.valueOf(dis.readUTF());
+            switch (sectionType) {
                 case PERSONAL:
                 case OBJECTIVE:
-                    as = new TextSection(dis.readUTF());
+                    sectionData = new TextSection(dis.readUTF());
                     break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
-                    List<String> info = new ArrayList<>();
-                    do {
-                        info.add(dis.readUTF());
-                    } while (!dis.readUTF().equals("next"));
-                    as = new ListSection(info);
+                    int dataLinesAmount = dis.readInt();
+                    List<String> dataList = new ArrayList<>(dataLinesAmount);
+
+                    for (int j = 0; j < dataLinesAmount; j++) {
+                        dataList.add(dis.readUTF());
+                    }
+                    sectionData = new ListSection(dataList);
                     break;
                 case EXPERIENCE:
                 case EDUCATION:
-                    String allData = dis.readUTF().replace("[", "").replace("]", "");
-                    as = addInfo(allData);
+                    sectionData = readSectionData(dis);
             }
-            resume.addSection(section, as);
+            resume.addSection(sectionType, sectionData);
         }
     }
 
-    private AbstractSection addInfo(String allData) {
-        List<String> dataList = new LinkedList<>(Arrays.asList(allData.split("\t")));
-        Organization organization = null;
-        List<Organization> organizationsList = new LinkedList<>();
+    private AbstractSection readSectionData(DataInputStream dis) throws IOException {
+        int organizationsAmount = dis.readInt();
+        List<Organization> organizationsList = new ArrayList<>();
+        Organization organization;
 
-        int i = 0;
-        do {
-            String url = null;
-            String description = null;
-            String name = dataList.get(i);
+        for (int i = 0; i < organizationsAmount; i++) {
+            String name = dis.readUTF();
+            String link = dis.readUTF();
+            organization = new Organization(name, link);
 
-            if (name.startsWith(", 2") || name.startsWith("2")) {
-                i = i - 2;
-            } else {
-                url = dataList.get(i + 1);
+            int positionsAmount = dis.readInt();
+            for (int j = 0; j < positionsAmount; j++) {
+                LocalDate startDate = LocalDate.parse(dis.readUTF());
+                LocalDate endDate = LocalDate.parse(dis.readUTF());
+                String position = dis.readUTF();
+                String description = dis.readUTF();
+                organization.addOrganizationInfo(startDate, endDate, position, description);
             }
-            if (name.startsWith(", ")) {
-                name = name.substring(2);
-            }
-
-            LocalDate startDate = getDate(dataList.get(i + 2));
-            LocalDate endDate = getDate(dataList.get(i + 3));
-            String position = dataList.get(i + 4);
-
-            //поле description может быть не заполнено
-            if (i + 5 < dataList.size()) {
-                description = dataList.get(i + 5);
-            }
-            if (url != null) {
-                organization = new Organization(name, url);
-            }
-            organization.addOrganizationInfo(startDate, endDate, position, description);
-
-            if (!(new HashSet<>(organizationsList).contains(organization))) {
-                organizationsList.add(organization);
-            }
-
-            i += 6;
-        } while (i < dataList.size());
+            organizationsList.add(organization);
+        }
         return new OrganizationSection(organizationsList);
-    }
-
-    private LocalDate getDate(String data) {
-        if (data.startsWith(", ")) {
-            data = data.replace(", ", "");
-        }
-        return LocalDate.parse(data);
     }
 }

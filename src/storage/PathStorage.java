@@ -4,7 +4,10 @@ import exception.StorageException;
 import model.Resume;
 import storage.serialization.StreamSerializer;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,17 +39,15 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected boolean isExist(Path path) {
-        return Files.exists(path);
+        return new File(path.toString()).isFile();
     }
 
     @Override
     protected void doDelete(Path path) {
-        if (isExist(path)) {
-            try {
-                Files.delete(path);
-            } catch (IOException e) {
-                throw new StorageException("Path deleting exception!", getFolderName(), e);
-            }
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            throw new StorageException("Path deleting exception!", getFolderName(), e);
         }
     }
 
@@ -63,7 +64,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected void doUpdate(Resume resume, Path path) {
         try {
-            streamSerializer.doWrite(resume, new BufferedOutputStream(new BufferedOutputStream(Files.newOutputStream(path))));
+            streamSerializer.doWrite(resume, (new BufferedOutputStream(Files.newOutputStream(path))));
         } catch (IOException e) {
             throw new StorageException("Path writing error!", getFolderName(), e);
         }
@@ -76,7 +77,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path path) {
         try {
-            return streamSerializer.doRead(new BufferedInputStream(new BufferedInputStream(Files.newInputStream(path))));
+            return streamSerializer.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path reading error!", getFolderName(), e);
         }
@@ -95,7 +96,7 @@ public class PathStorage extends AbstractStorage<Path> {
         }
     }
 
-    public String getFolderName() {
+    private String getFolderName() {
         return directory.getFileName().toString();
     }
 }

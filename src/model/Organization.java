@@ -25,6 +25,10 @@ public class Organization implements Serializable {
         this(new Link(name, url));
     }
 
+    public List<Position> getPositions() {
+        return positions;
+    }
+
     public Link getHomePage() {
         return homePage;
     }
@@ -51,9 +55,11 @@ public class Organization implements Serializable {
         return Objects.hash(homePage, positions);
     }
 
+
+
     @Override
     public String toString() {
-        return homePage + "\t" + positions + "\t";
+        return homePage + "," + positions;
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -113,7 +119,7 @@ public class Organization implements Serializable {
 
         @Override
         public String toString() {
-            return startDate + "\t" + endDate + "\t" + title +  "\t" + description;
+            return startDate + "," + endDate + "," + title + "," + description;
         }
     }
 }
