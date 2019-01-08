@@ -19,13 +19,13 @@ public class DataStreamSerializer implements StreamSerializer {
             Map<ContactType, String> contacts = resume.getContacts();
 
             //запись контактов в файл
-            writeSectionData(dos, contacts.entrySet(), entry -> {
+            writeData(dos, contacts.entrySet(), entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             });
 
             //запись в файл остальных секций
-            writeSectionData(dos, resume.getSections().entrySet(), entry -> {
+            writeData(dos, resume.getSections().entrySet(), entry -> {
                 SectionType type = entry.getKey();
                 AbstractSection section = entry.getValue();
                 dos.writeUTF(type.name());
@@ -36,15 +36,15 @@ public class DataStreamSerializer implements StreamSerializer {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        writeSectionData(dos, ((ListSection) section).getItems(), dos::writeUTF);
+                        writeData(dos, ((ListSection) section).getItems(), dos::writeUTF);
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        writeSectionData(dos, ((OrganizationSection) section).getOrganisations(), org -> {
+                        writeData(dos, ((OrganizationSection) section).getOrganisations(), org -> {
                             dos.writeUTF(org.getHomePage().getName());
                             dos.writeUTF(org.getHomePage().getUrl());
 
-                            writeSectionData(dos, org.getPositions(), position -> {
+                            writeData(dos, org.getPositions(), position -> {
                                 writeDate(dos, position.getStartDate());
                                 writeDate(dos, position.getEndDate());
                                 dos.writeUTF(position.getTitle());
@@ -64,18 +64,18 @@ public class DataStreamSerializer implements StreamSerializer {
             Resume resume = new Resume(uuid, fullName);
 
             //чтение контактов
-            readSectionData(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readData(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
 
             //чтение секций
-            readSectionData(dis, () -> {
+            readData(dis, () -> {
                 SectionType type = SectionType.valueOf(dis.readUTF());
-                resume.addSection(type, readSectionData(dis, type));
+                resume.addSection(type, readData(dis, type));
             });
             return resume;
         }
     }
 
-    private AbstractSection readSectionData(DataInputStream dis, SectionType type) throws IOException {
+    private AbstractSection readData(DataInputStream dis, SectionType type) throws IOException {
         switch (type) {
             case PERSONAL:
             case OBJECTIVE:
@@ -109,7 +109,7 @@ public class DataStreamSerializer implements StreamSerializer {
         T read() throws IOException;
     }
 
-    private <T> void writeSectionData(DataOutputStream dos, Collection<T> collection, DataWriter<T> writer) throws IOException {
+    private <T> void writeData(DataOutputStream dos, Collection<T> collection, DataWriter<T> writer) throws IOException {
         dos.writeInt(collection.size());
         for (T data : collection) {
             writer.write(data);
@@ -121,7 +121,7 @@ public class DataStreamSerializer implements StreamSerializer {
         dos.writeInt(ld.getMonth().getValue());
     }
 
-    private <T> void readSectionData(DataInputStream dis, DataReader reader) throws IOException {
+    private <T> void readData(DataInputStream dis, DataReader reader) throws IOException {
         int size = dis.readInt();
         for (int i = 0; i < size; i++) {
             reader.read();

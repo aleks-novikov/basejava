@@ -66,7 +66,6 @@ public class Organization implements Serializable {
     }
 
 
-
     @Override
     public String toString() {
         return homePage + "," + positions;
@@ -116,6 +115,7 @@ public class Organization implements Serializable {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Position position = (Position) o;
+
             return Objects.equals(startDate, position.startDate) &&
                     Objects.equals(endDate, position.endDate) &&
                     Objects.equals(title, position.title) &&

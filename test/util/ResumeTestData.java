@@ -23,28 +23,28 @@ public class ResumeTestData {
         List<Organization> organizationsList = new LinkedList<>();
 
         Organization organization = new Organization("Сбербанк", "https://www.sberbank.ru/ru/person");
-        organization.addOrganizationInfo(LocalDate.of(2017, Month.AUGUST, 1), LocalDate.of(2018, Month.AUGUST, 13),
+        organization.addOrganizationInfo(LocalDate.of(2017, Month.AUGUST, 1), LocalDate.of(2018, Month.AUGUST, 1),
                 "Программист VBA", "Разрабатывал программы на VBA для автоматизации сбора и обработки данных в MS Excel, Access, Outlook.");
         organizationsList.add(organization);
 
         organization = new Organization("Ниеншанц-Автоматика", "https://nnz-ipc.ru");
-        organization.addOrganizationInfo(LocalDate.of(2017, Month.JUNE, 19), LocalDate.of(2017, Month.JUNE, 30),
+        organization.addOrganizationInfo(LocalDate.of(2017, Month.JUNE, 1), LocalDate.of(2017, Month.JULY, 1),
                 "Администратор баз данных", "За 2 недели обработал около 20 000 наименований товаров в Excel.");
-        organization.addOrganizationInfo(LocalDate.of(2016, Month.JUNE, 15), LocalDate.of(2016, Month.JUNE, 29),
+        organization.addOrganizationInfo(LocalDate.of(2016, Month.JUNE, 1), LocalDate.of(2016, Month.JULY, 1),
                 "Администратор баз данных", "За 2 недели завёл и разместил более 800 товарных карточек на сайте компании.");
         organizationsList.add(organization);
 
         resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(organizationsList));
         List<Organization> educationList = new LinkedList<>();
         organization = new Organization("baseJava", "http://javaops.ru/reg/basejava");
-        organization.addOrganizationInfo(LocalDate.of(2018, Month.SEPTEMBER, 10), LocalDate.now(),
+        organization.addOrganizationInfo(LocalDate.of(2018, Month.SEPTEMBER, 1), LocalDate.of(2019, Month.JANUARY, 1),
                 "Junior Java-разработчик",
                 "Разрабатываю Web-приложение База данных резюме с использованием Java, IntellijIDEA, GitHub, JUnit");
         educationList.add(organization);
 
         organization = new Organization("Санкт-Петербургский политехнический университет Петра Великого", "http://www.spbstu.ru");
-        organization.addOrganizationInfo(LocalDate.of(2014, Month.SEPTEMBER, 1), LocalDate.of(2018, Month.JUNE, 14),
-                "Высшая школа управления и бизнеса, Информатик-экономист", "");
+        organization.addOrganizationInfo(LocalDate.of(2014, Month.SEPTEMBER, 1), LocalDate.of(2018, Month.JUNE, 1),
+                "Высшая школа управления и бизнеса, Информатик-экономист", null);
         educationList.add(organization);
         resume.addSection(SectionType.EDUCATION, new OrganizationSection(educationList));
         return resume;
