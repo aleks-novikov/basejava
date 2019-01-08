@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,6 +24,15 @@ public class Organization implements Serializable {
 
     public Organization(String name, String url) {
         this(new Link(name, url));
+    }
+
+    public Organization(String name, String url, Position... positions) {
+        this(new Link(name, url), Arrays.asList(positions));
+    }
+
+    public Organization(Link homePage, List<Position> positions) {
+        this.homePage = homePage;
+        this.positions = positions;
     }
 
     public List<Position> getPositions() {
@@ -75,14 +85,14 @@ public class Organization implements Serializable {
         public Position() {
         }
 
-        Position(LocalDate startDate, LocalDate endDate, String title, String description) {
+        public Position(LocalDate startDate, LocalDate endDate, String title, String description) {
             Objects.requireNonNull(startDate, "startDate mustn't be null");
             Objects.requireNonNull(endDate, "endDate mustn't be null");
             Objects.requireNonNull(title, "title mustn't be null");
             this.startDate = startDate;
             this.endDate = endDate;
             this.title = title;
-            this.description = description;
+            this.description = (description == null) ? "" : description;
         }
 
         public LocalDate getStartDate() {
