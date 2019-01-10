@@ -69,13 +69,13 @@ public class DataStreamSerializer implements StreamSerializer {
             //чтение секций
             readData(dis, () -> {
                 SectionType type = SectionType.valueOf(dis.readUTF());
-                resume.addSection(type, readData(dis, type));
+                resume.addSection(type, readSection(dis, type));
             });
             return resume;
         }
     }
 
-    private AbstractSection readData(DataInputStream dis, SectionType type) throws IOException {
+    private AbstractSection readSection(DataInputStream dis, SectionType type) throws IOException {
         switch (type) {
             case PERSONAL:
             case OBJECTIVE:
@@ -121,7 +121,7 @@ public class DataStreamSerializer implements StreamSerializer {
         dos.writeInt(ld.getMonth().getValue());
     }
 
-    private <T> void readData(DataInputStream dis, DataReader reader) throws IOException {
+    private void readData(DataInputStream dis, DataReader reader) throws IOException {
         int size = dis.readInt();
         for (int i = 0; i < size; i++) {
             reader.read();
