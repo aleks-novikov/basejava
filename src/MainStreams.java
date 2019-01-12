@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 public class MainStreams {
@@ -14,25 +15,13 @@ public class MainStreams {
         System.out.println("Новый массив чисел: " + oddOrEven(list));
     }
 
-    private static int minValue(int[] values) {
-        List<Integer> list = Arrays.stream(values)
-                .boxed().distinct().sorted()
-                .collect(Collectors.toList());
-
-        int sum = 0;
-        for (int i = 0; i < list.size(); i++) {
-            sum += list.get(i) * Math.pow(10, list.size() - i - 1);
-        }
-        return sum;
+    private static int minValue(int[] values) throws NoSuchElementException {
+        return Arrays.stream(values).distinct().reduce((v1, v2) -> Integer.parseInt(v1 + "" + v2)).getAsInt();
     }
 
-    private static List<Integer> oddOrEven(List<Integer> list) {
+    private static List<Integer> oddOrEven(List<Integer> list) throws NoSuchElementException {
         int sum = list.stream().reduce((v1, v2) -> v1 + v2).get();
         System.out.println("Сумма всех чисел массива равна " + sum);
-        return transformList(list, sum % 2 == 0);
-    }
-
-    private static List<Integer> transformList(List<Integer> list, boolean sumIsEven) {
-        return list.stream().filter(num -> sumIsEven == (num % 2 != 0)).collect(Collectors.toList());
+        return list.stream().filter(num -> (sum % 2 == 0) == (num % 2 != 0)).collect(Collectors.toList());
     }
 }
