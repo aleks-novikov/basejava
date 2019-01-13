@@ -1,6 +1,7 @@
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class MainStreams {
     public static void main(String[] args) {
@@ -15,12 +16,17 @@ public class MainStreams {
     }
 
     private static int minValue(int[] values) {
-        return Arrays.stream(values).distinct().sorted().reduce(0, (v1, v2) -> Integer.parseInt(v1 + "" + v2));
+        return IntStream.of(values)
+                .distinct()
+                .sorted()
+                .reduce(0, (v1, v2) -> v1 * 10 + v2);
     }
 
-    private static List<Integer> oddOrEven(List<Integer> list){
+    private static List<Integer> oddOrEven(List<Integer> list) {
         int sum = list.stream().reduce(0, (v1, v2) -> v1 + v2);
         System.out.println("Сумма всех чисел массива равна " + sum);
-        return list.stream().filter(num -> (sum % 2 != num % 2)).collect(Collectors.toList());
+        return list.stream()
+                .filter(num -> (sum % 2 != num % 2))
+                .collect(Collectors.toList());
     }
 }
