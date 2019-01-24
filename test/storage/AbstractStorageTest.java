@@ -6,7 +6,7 @@ import model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import util.ResumeTestData;
+import util.Config;
 
 import java.io.File;
 import java.util.Arrays;
@@ -14,24 +14,24 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File("G:\\Java\\Projects\\basejava\\storage");
+    static final File STORAGE_DIR = Config.get().getStorageDir();
     protected Storage storage;
-    protected int oldStorageSize;
-    protected static final String UUID_1 = "uuid1";
-    protected static final String UUID_2 = "uuid2";
-    protected static final String UUID_3 = "uuid3";
-    protected static final String UUID_4 = "uuid4";
-    protected static final Resume RESUME_1 = new Resume(UUID_1, "Name1");
-    protected static final Resume RESUME_2 = new Resume(UUID_2, "Name2");
-    protected static final Resume RESUME_3 = new Resume(UUID_3, "Name3");
-    protected static final Resume RESUME_4 = new Resume(UUID_4, "Name4");
+    private int oldStorageSize;
+    private static final String UUID_1 = "uuid1";
+    private static final String UUID_2 = "uuid2";
+    private static final String UUID_3 = "uuid3";
+    private static final String UUID_4 = "uuid4";
+    private static final Resume RESUME_1 = new Resume(UUID_1, "Name1");
+    private static final Resume RESUME_2 = new Resume(UUID_2, "Name2");
+    private static final Resume RESUME_3 = new Resume(UUID_3, "Name3");
+    private static final Resume RESUME_4 = new Resume(UUID_4, "Name4");
 
-    static {
+   /* static {
         System.out.println("Тест заполнения резюме данными:\n");
         ResumeTestData.getResumeInfo(ResumeTestData.addResumeInfo(RESUME_1));
         ResumeTestData.getResumeInfo(ResumeTestData.addResumeInfo(RESUME_2));
         ResumeTestData.getResumeInfo(ResumeTestData.addResumeInfo(RESUME_3));
-    }
+    }*/
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -92,7 +92,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void update() throws Exception {
+    public void update() {
         Resume newResume = new Resume(UUID_1, "NewName");
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_1));
@@ -102,7 +102,7 @@ public abstract class AbstractStorageTest {
     public void updateNotExistStorageException() {
         storage.update(RESUME_4);
     }
-
+    
     @Test
     public void getAll() {
         assertEquals(3, storage.getAllSorted().size());

@@ -95,7 +95,7 @@ public class MainConcurrency {
 
     //сихронизация с помощью Lock:
     /*private void inc() {
-        REENTRANT_LOCK.REENTRANT_LOCK();
+        REENTRANT_LOCK.lock();
         try {
             counter++;
         } finally {

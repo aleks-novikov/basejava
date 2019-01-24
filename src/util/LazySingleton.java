@@ -3,9 +3,6 @@ package util;
 public class LazySingleton {
     volatile private static LazySingleton instance;
 
-    private LazySingleton() {
-    }
-
     //паттерн Double checked locking
     public static LazySingleton getInstance() {
         if (instance == null) {
