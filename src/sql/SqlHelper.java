@@ -3,15 +3,22 @@ package sql;
 import exception.StorageException;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class SqlHelper<T> {
-    public T executeStatement(ConnectionFactory connectionFactory, String statement, SqlSettings settings) {
+public class SqlHelper {
+    private static ConnectionFactory connectionFactory;
+
+    public SqlHelper(String url, String user, String password) {
+        connectionFactory = () -> DriverManager.getConnection(url, user, password);
+    }
+
+    public <T> T execute(String statement, SqlExecutor settings) {
         T result;
         try (Connection connection = connectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(statement)) {
-            result = (T) settings.setSettings(ps);
+            result = (T) settings.execute(ps);
         } catch (SQLException e) {
             throw new StorageException(e);
         }
