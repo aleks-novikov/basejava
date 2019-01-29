@@ -1,19 +1,17 @@
 package util;
 
-import model.*;
+import model.AbstractSection;
+import model.ContactType;
+import model.Resume;
+import model.SectionType;
 
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class ResumeTestData {
     public static Resume addResumeInfo(Resume resume) {
         resume.addContact(ContactType.PHONE, "952-345-54-67");
         resume.addContact(ContactType.SKYPE, "alex-nov");
-        resume.addSection(SectionType.OBJECTIVE, new TextSection("Junior Java-разработчик"));
+       /* resume.addSection(SectionType.OBJECTIVE, new TextSection("Junior Java-разработчик"));
         resume.addSection(SectionType.PERSONAL, new TextSection("Ответственность, стремление к постоянному развитию и упорство при достижении поставленных целей."));
         resume.addSection(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList(
                 "2018 г. - разрабатываю Web-приложение База данных резюме на курсе baseJava.",
@@ -46,7 +44,7 @@ public class ResumeTestData {
         organization.addOrganizationInfo(LocalDate.of(2014, Month.SEPTEMBER, 1), LocalDate.of(2018, Month.JUNE, 1),
                 "Высшая школа управления и бизнеса, Информатик-экономист", null);
         educationList.add(organization);
-        resume.addSection(SectionType.EDUCATION, new OrganizationSection(educationList));
+        resume.addSection(SectionType.EDUCATION, new OrganizationSection(educationList));*/
         return resume;
     }
 
