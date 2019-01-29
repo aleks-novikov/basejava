@@ -65,9 +65,7 @@ public class SqlStorage implements Storage {
                     try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
                         ps.setString(1, resume.getUuid());
                         ps.setString(2, resume.getFullName());
-                        if (ps.executeUpdate() != 1) {
-                            throw new NotExistStorageException(resume.getUuid());
-                        }
+                        ps.execute();
                     }
                     insertContacts(conn, resume);
                     return null;
@@ -89,7 +87,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-       return sqlHelper.execute("SELECT * FROM resume " +
+        return sqlHelper.execute("SELECT * FROM resume " +
                 "LEFT JOIN contact " +
                 "ON resume.uuid = contact.resume_uuid " +
                 "ORDER BY full_name, uuid", ps -> {
@@ -98,11 +96,9 @@ public class SqlStorage implements Storage {
 
             while (rs.next()) {
                 String uuid = rs.getString("uuid");
-                Resume resume = resumeMap.get(uuid);
-                if (resume == null) {
-                    resume = new Resume(uuid, rs.getString("full_name"));
-                    resumeMap.put(uuid, resume);
-                }
+                String fullName = rs.getString("full_name");
+                Resume resume = resumeMap.computeIfAbsent(uuid, r -> new Resume(uuid, fullName));
+                resumeMap.put(uuid, resume);
                 addContacts(rs, resume);
             }
             return new ArrayList<>(resumeMap.values());
@@ -139,8 +135,7 @@ public class SqlStorage implements Storage {
     private void deleteContacts(Connection connection, Resume resume) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement("DELETE FROM contact WHERE contact.resume_uuid = ?")) {
             ps.setString(1, resume.getUuid());
-            ps.addBatch();
-            ps.executeBatch();
+            ps.executeUpdate();
         }
     }
 }
