@@ -33,11 +33,29 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" exported="" name="gson-2.8.5" level="project" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="library" name="gson-2.8.5" level="project" />
+    <orderEntry type="module-library" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../DataBases/postgresql-42.2.5.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/javax.servlet.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="PROVIDED">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/javax.servlet.jsp.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/javax.servlet.jsp.jstl.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
