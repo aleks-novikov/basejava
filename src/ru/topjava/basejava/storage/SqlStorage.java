@@ -11,6 +11,11 @@ public class SqlStorage implements Storage {
     private SqlHelper sqlHelper;
 
     public SqlStorage(String url, String user, String password) {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(url, user, password));
     }
 
@@ -107,8 +112,22 @@ public class SqlStorage implements Storage {
                     resumes.put(uuid, new Resume(rs.getString("uuid"), rs.getString("full_name")));
                 }
             }
-            addResumeData(conn, resumes, "SELECT * FROM contact");
-            addResumeData(conn, resumes, "SELECT * FROM section");
+
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    Resume resume = resumes.get(rs.getString("resume_uuid"));
+                    addContacts(rs, resume);
+                }
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM section")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    Resume resume = resumes.get(rs.getString("resume_uuid"));
+                    addSections(rs, resume);
+                }
+            }
             return new ArrayList<>(resumes.values());
         });
     }
@@ -171,29 +190,16 @@ public class SqlStorage implements Storage {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         ListSection values = (ListSection) entry.getValue();
-                        StringBuilder sb = new StringBuilder();
-                        for (String item : values.getItems()) {
-                            sb.append(item).append("\n");
+                        List<String> list = values.getItems();
+                        String data = list.get(0);
+                        for (int i = 1; i < list.size(); i++) {
+                            data = String.join("\n", data, list.get(i));
                         }
-                        ps.setString(3, sb.toString());
+                        ps.setString(3, data);
                 }
                 ps.addBatch();
             }
             ps.executeBatch();
-        }
-    }
-
-    private void addResumeData(Connection conn, Map<String, Resume> resumes, String statement) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement(statement)) {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Resume resume = resumes.get(rs.getString("resume_uuid"));
-                if (statement.contains("contact")) {
-                    addContacts(rs, resume);
-                } else {
-                    addSections(rs, resume);
-                }
-            }
         }
     }
 
