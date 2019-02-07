@@ -190,12 +190,7 @@ public class SqlStorage implements Storage {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         ListSection values = (ListSection) entry.getValue();
-                        List<String> list = values.getItems();
-                        String data = list.get(0);
-                        for (int i = 1; i < list.size(); i++) {
-                            data = String.join("\n", data, list.get(i));
-                        }
-                        ps.setString(3, data);
+                        ps.setString(3, String.join("\n", values.getItems()));
                 }
                 ps.addBatch();
             }
