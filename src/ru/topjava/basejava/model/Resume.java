@@ -33,6 +33,10 @@ public class Resume implements Comparable<Resume>, Serializable {
         return uuid;
     }
 
+    public void setFullName(String fullname) {
+        this.fullName = fullname;
+    }
+
     public String getFullName() {
         return fullName;
     }
@@ -70,13 +74,6 @@ public class Resume implements Comparable<Resume>, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-
-       /* System.out.println(Objects.equals(sections, resume.sections));
-
-        System.out.println(Objects.equals(uuid, resume.uuid) &&
-                Objects.equals(fullName, resume.fullName) &&
-                Objects.equals(contacts, resume.contacts) &&
-                Objects.equals(sections, resume.sections));*/
 
         return Objects.equals(uuid, resume.uuid) &&
                 Objects.equals(fullName, resume.fullName) &&

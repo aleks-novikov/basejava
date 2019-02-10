@@ -14,14 +14,20 @@
     <table border="1" cellpadding="8" cellspacing="0">
         <tr>
             <th>Имя</th>
-            <th>Skype</th>
+            <th>Контакты</th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
         <c:forEach items="${resumes}" var="resume">
             <%--добавление интеграции с Resume--%>
             <jsp:useBean id="resume" type="ru.topjava.basejava.model.Resume"/>
             <tr>
-                <td><a href="resume?uuid=${resume.uuid}"> ${resume.fullName} </a></td>
-                <td> ${resume.getContact(ContactType.SKYPE)}</td>
+                <td><a href="resume?uuid=${resume.uuid}&action=view"> ${resume.fullName} </a></td>
+                <td><%=ContactType.PHONE.toHtml(resume.getContact(ContactType.PHONE))%></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=add"><img src="img/add.png" alt="Добавить резюме"></a></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png" alt="Удалить резюме"></a></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Редактировать резюме"></a></td>
             </tr>
         </c:forEach>
     </table>
