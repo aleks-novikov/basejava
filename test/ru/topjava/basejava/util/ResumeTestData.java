@@ -2,7 +2,11 @@ package ru.topjava.basejava.util;
 
 import ru.topjava.basejava.model.*;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class ResumeTestData {
@@ -16,7 +20,7 @@ public class ResumeTestData {
                 "2017-2018 гг. - в процессе работы в Сбербанке создал несколько проектов для сбора и обработки данных на языке VBA.")));
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList("Java 8 SE", "Intellij IDEA", "Git")));
 
-       /* List<Organization> organizationsList = new LinkedList<>();
+        List<Organization> organizationsList = new LinkedList<>();
 
         Organization organization = new Organization("Сбербанк", "https://www.sberbank.ru/ru/person");
         organization.addOrganizationInfo(LocalDate.of(2017, Month.AUGUST, 1), LocalDate.of(2018, Month.AUGUST, 1),
@@ -42,7 +46,7 @@ public class ResumeTestData {
         organization.addOrganizationInfo(LocalDate.of(2014, Month.SEPTEMBER, 1), LocalDate.of(2018, Month.JUNE, 1),
                 "Высшая школа управления и бизнеса, Информатик-экономист", null);
         educationList.add(organization);
-        resume.addSection(SectionType.EDUCATION, new OrganizationSection(educationList));*/
+        resume.addSection(SectionType.EDUCATION, new OrganizationSection(educationList));
         return resume;
     }
 

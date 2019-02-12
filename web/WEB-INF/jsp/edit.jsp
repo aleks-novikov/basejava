@@ -40,7 +40,6 @@
                     <dl>
                         <dt>${section.title}</dt>
                         <dd><input type="text" name="${section.name()}" size="80"
-                            <%--<dd><input type="text" name="${section.title}" size="80"--%>
                                    value="${resume.getSection(section)}"></dd>
                     </dl>
                 </c:when>
@@ -54,17 +53,13 @@
                     </dl>
                 </c:when>
 
-                <%--<c:when test="${section.title.equals('Опыт работы') || section.title.equals('Образование')}">
+                <c:when test="${section.title.equals('Опыт работы') || section.title.equals('Образование')}">
                     <dl>
                         <dt>${section.title}</dt>
-                        <dd><textarea name="${section.title}" rows="4"
+                        <dd><textarea name="${section.title}" rows="7"
                                       cols="75">${resume.getSection(section)}</textarea></dd>
-
-                    <p>Организация <input type="text" name="${resume.getSection(section)}" size="25"></p>
-                    <p>Дата начала <input type="date" width="10"></p>
-                    <p>Дата окончания <input type="date" width="50"></p>
-                    <p>Описание <textarea name="${section.title}" rows="4" cols="75">${resume.getSection(section)}</textarea></p>&ndash;%&gt;
-                </c:when>--%>
+                    </dl>
+                </c:when>
             </c:choose>
         </c:forEach>
 

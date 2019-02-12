@@ -22,5 +22,19 @@ CREATE TABLE section
      ON DELETE CASCADE, type  varchar     NOT NULL, value varchar NOT NULL
 );
 
+create table organization
+(
+  id serial not null,
+  resume_uuid varchar(36) not null
+    constraint organization_resume_uuid_fk
+      references resume
+      on delete cascade,
+  name varchar not null,
+  start_date timestamp not null,
+  end_date timestamp,
+  description varchar
+);
+
 CREATE UNIQUE INDEX contact_uuid_type_index ON contact(resume_uuid, type);
 CREATE UNIQUE INDEX section_uuid_type_index ON section(resume_uuid, type);
+CREATE UNIQUE INDEX organization_uuid_type_index ON organization(resume_uuid, name);
