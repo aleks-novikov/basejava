@@ -1,9 +1,8 @@
 <%@ page import="ru.topjava.basejava.model.ListSection" %>
 <%@ page import="ru.topjava.basejava.model.OrganizationSection" %>
-<%@ page import="java.util.List" %>
+<%@ page import="ru.topjava.basejava.model.TextSection" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <html>
 <head>
@@ -27,37 +26,43 @@
 </section>
 
 <section>
-    <c:forEach var="section" items="${resume.sections}">
-        <jsp:useBean id="section"
-                     type="java.util.Map.Entry<ru.topjava.basejava.model.SectionType, java.lang.String>"/>
-        <h3>${section.key.title}</h3>
+    <c:forEach var="sectionEntry" items="${resume.sections}">
+        <jsp:useBean id="sectionEntry"
+                     type="java.util.Map.Entry<ru.topjava.basejava.model.SectionType, ru.topjava.basejava.model.AbstractSection>"/>
+        <s:set var="type" value="${sectionEntry.key.title}"/>
+        <s:set var="section" value="${sectionEntry.value}"/>
+        <jsp:useBean id="section" type="ru.topjava.basejava.model.AbstractSection"/>
+
         <c:choose>
-            <c:when test="${section.key.title.equals('Позиция') || section.key.title.equals('Личные качества')}">
-                <p>${section.value}</p>
+            <c:when test="${type.equals('Позиция')}">
+                <h3> ${type} — <%=((TextSection) section).getText()%>
+                </h3>
+            </c:when>
+            <c:when test="${type.equals('Личные качества')}">
+                <h3>${type}</h3>
+                <%=((TextSection) section).getText()%>
             </c:when>
 
-            <c:when test="${section.key.title.equals('Достижения') || section.key.title.equals('Квалификация')}">
-                <%
-                    List<String> sectionData = ((ListSection) resume.getSection(section.getKey())).getItems();
-                    request.setAttribute("sectionData", sectionData);
-                %>
+            <c:when test="${type.equals('Достижения') || type.equals('Квалификация')}">
+                <h3>${type}</h3>
                 <ul>
-                    <c:forEach var="item" items="${sectionData}">
+                    <c:forEach var="item" items="<%=((ListSection) section).getItems()%>">
                         <li>${item}</li>
                     </c:forEach>
                 </ul>
             </c:when>
 
-            <c:when test="${section.key.title.equals('Опыт работы') || section.key.title.equals('Образование')}">
-                <%
-                    OrganizationSection sectionData = (OrganizationSection) resume.getSection(section.getKey());
-                    request.setAttribute("sectionData", sectionData.getOrganisations());
-                %>
-
-                <c:forEach var="item" items="${sectionData}">
-                    <c:set var="organization" value="${item.homePage.name}"/>
-                    <c:set var="url" value="${item.homePage.url}"/>
-                    <p><a href="${url}">${organization}</a></p>
+            <c:when test="${type.equals('Опыт работы') || type.equals('Образование')}">
+                <h3>${type}</h3>
+                <c:forEach var="item" items="<%=((OrganizationSection) section).getOrganisations() %>">
+                    <c:choose>
+                        <c:when test="${empty item.homePage.url}">
+                            <h3>${item.homePage.name}</h3>
+                        </c:when>
+                        <c:otherwise>
+                            <h3><a href="${item.homePage.url}">${item.homePage.name}</a></h3>
+                        </c:otherwise>
+                    </c:choose>
 
                     <c:forEach var="data" items="${item.positions}">
                         <c:set var="startDate" value="${data.startDate}"/>
@@ -67,14 +72,13 @@
                         ${startDate} - ${endDate}, <b>${title}</b>
                         <p>${description}</p>
                     </c:forEach>
-                    <br/>
                 </c:forEach>
-
             </c:when>
         </c:choose>
     </c:forEach>
 </section>
 <br/>
+<button onclick="window.history.back()">Назад</button>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

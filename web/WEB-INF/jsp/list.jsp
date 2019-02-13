@@ -17,7 +17,6 @@
             <th>Контакты</th>
             <th></th>
             <th></th>
-            <th></th>
         </tr>
         <c:forEach items="${resumes}" var="resume">
             <%--добавление интеграции с Resume--%>
@@ -25,12 +24,15 @@
             <tr>
                 <td><a href="resume?uuid=${resume.uuid}&action=view"> ${resume.fullName} </a></td>
                 <td><%=ContactType.PHONE.toHtml(resume.getContact(ContactType.PHONE))%></td>
-                <td><a href="resume?uuid=${resume.uuid}&action=add"><img src="img/add.png" alt="Добавить резюме"></a></td>
                 <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png" alt="Удалить резюме"></a></td>
                 <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Редактировать резюме"></a></td>
             </tr>
         </c:forEach>
     </table>
+    <br/>
+    <p>Добавить новое резюме
+        <a href="resume?uuid=${resume.uuid}&action=add"><img src="img/add.png" alt="Добавить резюме" align="center"></a>
+    </p>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

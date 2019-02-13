@@ -148,7 +148,6 @@ public class SqlStorage implements Storage {
                     addOrganizations(rs, resume);
                 }
             }
-
             return new ArrayList<>(resumes.values());
         });
     }
@@ -215,7 +214,6 @@ public class SqlStorage implements Storage {
                 rs.getDate("end_date").toLocalDate(),
                 rs.getString("title"),
                 rs.getString("description"));
-
         resume.addSection(type, new OrganizationSection(organizations));
     }
 
@@ -277,7 +275,6 @@ public class SqlStorage implements Storage {
                                 ps.setString(8, position.getDescription());
                                 ps.addBatch();
                             }
-                            System.out.println();
                         }
                 }
             }

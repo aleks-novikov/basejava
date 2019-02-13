@@ -42,6 +42,7 @@ public class ResumeServlet extends HttpServlet {
         for (SectionType type : SectionType.values()) {
             String value = request.getParameter(type.name());
             if (value != null && value.trim().length() != 0) {
+                value = value.replaceAll("\\s {2,}", "");
                 switch (type) {
                     case OBJECTIVE:
                     case PERSONAL:
@@ -49,7 +50,7 @@ public class ResumeServlet extends HttpServlet {
                         break;
                     case QUALIFICATIONS:
                     case ACHIEVEMENT:
-                        String[] values = value.replace("\r", "").split ("\n");
+                        String[] values = value.replace("\n", "").split ("\r");
                         resume.addSection(type, new ListSection(Arrays.asList(values)));
                 }
             } else {
@@ -73,7 +74,7 @@ public class ResumeServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
             return;
         }
-        Resume resume = null;
+        Resume resume;
         switch (action) {
             case "delete":
                 storage.delete(uuid);

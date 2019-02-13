@@ -18,8 +18,16 @@ footer {
     margin: 20px 0;
 }
 
+p {
+    margin: 5px 0 10px;
+}
+
+ul {
+    margin: 5px 0 5px;
+}
+
 dl {
-    margin: 8px 0;
+    margin: 5px 0;
 }
 
 dt {
@@ -30,11 +38,20 @@ dt {
 
 dd {
     display: inline-block;
-    margin: 5px 0 5px 115px;
+    margin: 3px 0 3px 115px;
 }
 
-h2, h3 {
-    margin: 30px 0 5px;
+h2 {
+    margin: 10px 0 20px;
+}
+
+h3, h4 {
+    margin: 20px 0 5px;
+}
+
+textarea {
+   height: 6em;
+    width: 27.5em;
 }
 
 a[href^="skype:"] {
