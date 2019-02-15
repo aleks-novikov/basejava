@@ -17,7 +17,7 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <h2>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit.png"></a></h2>
+    <h2>${resume.fullName} <a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit.png"></a></h2>
     <c:forEach var="contact" items="${resume.contacts}">
         <jsp:useBean id="contact"
                      type="java.util.Map.Entry<ru.topjava.basejava.model.ContactType, java.lang.String>"/>
@@ -29,8 +29,8 @@
     <c:forEach var="sectionEntry" items="${resume.sections}">
         <jsp:useBean id="sectionEntry"
                      type="java.util.Map.Entry<ru.topjava.basejava.model.SectionType, ru.topjava.basejava.model.AbstractSection>"/>
-        <s:set var="type" value="${sectionEntry.key.title}"/>
-        <s:set var="section" value="${sectionEntry.value}"/>
+        <c:set var="type" value="${sectionEntry.key.title}"/>
+        <c:set var="section" value="${sectionEntry.value}"/>
         <jsp:useBean id="section" type="ru.topjava.basejava.model.AbstractSection"/>
 
         <c:choose>
@@ -78,7 +78,7 @@
     </c:forEach>
 </section>
 <br/>
-<button onclick="window.history.back()">Назад</button>
+<button type="button" onclick="window.history.back()">Назад</button>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

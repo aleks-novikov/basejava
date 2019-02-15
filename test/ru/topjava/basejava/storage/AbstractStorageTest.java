@@ -6,33 +6,17 @@ import ru.topjava.basejava.exception.ExistStorageException;
 import ru.topjava.basejava.exception.NotExistStorageException;
 import ru.topjava.basejava.model.Resume;
 import ru.topjava.basejava.util.Config;
-import ru.topjava.basejava.util.ResumeTestData;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
+import static ru.topjava.basejava.util.ResumeTestData.*;
 
 public abstract class AbstractStorageTest {
     static final File STORAGE_DIR = Config.get().getStorageDir();
     protected Storage storage;
     private int oldStorageSize;
-    private static final String UUID_1 = UUID.randomUUID().toString();
-    private static final String UUID_2 = UUID.randomUUID().toString();
-    private static final String UUID_3 = UUID.randomUUID().toString();
-    private static final String UUID_4 = UUID.randomUUID().toString();
-    private static final Resume RESUME_1 = new Resume(UUID_1, "Name1");
-    private static final Resume RESUME_2 = new Resume(UUID_2, "Name2");
-    private static final Resume RESUME_3 = new Resume(UUID_3, "Name3");
-    private static final Resume RESUME_4 = new Resume(UUID_4, "Name4");
-
-    static {
-        System.out.println("Тест заполнения резюме данными:\n");
-        ResumeTestData.getResumeInfo(ResumeTestData.addResumeInfo(RESUME_1));
-        ResumeTestData.getResumeInfo(ResumeTestData.addResumeInfo(RESUME_2));
-        ResumeTestData.getResumeInfo(ResumeTestData.addResumeInfo(RESUME_3));
-    }
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;

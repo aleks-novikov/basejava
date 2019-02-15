@@ -64,12 +64,12 @@ public class DataStreamSerializer implements StreamSerializer {
             Resume resume = new Resume(uuid, fullName);
 
             //чтение контактов
-            readData(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readData(dis, () -> resume.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
 
             //чтение секций
             readData(dis, () -> {
                 SectionType type = SectionType.valueOf(dis.readUTF());
-                resume.addSection(type, readSection(dis, type));
+                resume.setSection(type, readSection(dis, type));
             });
             return resume;
         }

@@ -2,6 +2,7 @@
 <%@ page import="ru.topjava.basejava.model.ListSection" %>
 <%@ page import="ru.topjava.basejava.model.OrganizationSection" %>
 <%@ page import="ru.topjava.basejava.model.SectionType" %>
+<%@ page import="ru.topjava.basejava.util.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -22,7 +23,7 @@
     <input type="hidden" name="uuid" value="${resume.uuid}">
     <dl>
         <dt>Имя:</dt>
-        <dd><input type="text" name="fullName" size="50" value="${resume.fullName}"></dd>
+        <dd><input type="text" name="fullName" size="45" value="${resume.fullName}"></dd>
     </dl>
 
     <section>
@@ -30,7 +31,7 @@
         <c:forEach var="type" items="<%=ContactType.values()%>">
             <dl>
                 <dt>${type.title}</dt>
-                <dd><input type="text" name="${type.name()}" size="30" value="${resume.getContact(type)}"></dd>
+                <dd><input type="text" name="${type.name()}" size="45" value="${resume.getContact(type)}"></dd>
             </dl>
         </c:forEach>
     </section>
@@ -41,77 +42,66 @@
             <c:set var="section" value="${resume.getSection(type)}"/>
             <jsp:useBean id="section" type="ru.topjava.basejava.model.AbstractSection"/>
 
+            <h3> ${type.title} </h3>
             <c:choose>
                 <c:when test="${type.title.equals('Позиция')}">
-                    <dl>
-                        <dt>${type.title}</dt>
-                        <dd><input type="text" name="${type}" size="50" value="${resume.getSection(type)}"></dd>
-                    </dl>
+                    <input type="text" name="${type}" size="60" value="${section}">
                 </c:when>
 
                 <c:when test="${type.title.equals('Личные качества')}">
-                    <dl>
-                        <dt>${type.title}</dt>
-                        <dd><textarea name="${type}">
-                                ${resume.getSection(type)}
-                        </textarea>
-                        </dd>
-                    </dl>
+                    <textarea name="${type}">${section}</textarea>
                 </c:when>
 
                 <c:when test="${type.title.equals('Достижения') || type.title.equals('Квалификация')}">
-                    <dl>
-                        <dt>${type.title}</dt>
-                        <dd><textarea name="${type}">
-                <c:forEach var="data" items="<%=((ListSection) section).getItems()%>">
-                    ${data}
-                </c:forEach>
-            </textarea>
-                        </dd>
-                    </dl>
+                    <textarea name="${type}"><%=String.join("\n", ((ListSection) section).getItems())%></textarea>
                 </c:when>
 
                 <c:when test="${type.title.equals('Опыт работы') || type.title.equals('Образование')}">
-                    <h3>${type.title}</h3>
 
-                    <c:forEach var="org" items="<%=((OrganizationSection) section).getOrganisations()%>">
+                    <c:forEach var="org" items="<%=((OrganizationSection) section).getOrganisations()%>"
+                               varStatus="counter">
                         <dl>
-                            <dt>Название организации</dt>
-                            <dd><input type="text" name="${type}" size="50" value="${org.homePage.name}"></dd>
+                            <dt>Название организации:</dt>
+                            <dd><input type="text" name="${type}" size="45" value="${org.homePage.name}"></dd>
                         </dl>
                         <dl>
-                            <dt>Ссылка</dt>
-                            <dd><input type="text" name="${type}" size="50" value="${org.homePage.url}"></dd>
+                            <dt>Ссылка:</dt>
+                            <dd><input type="text" name="${type}" size="45" value="${org.homePage.url}"></dd>
                         </dl>
 
                         <c:forEach var="position" items="${org.positions}">
+                            <jsp:useBean id="position" type="ru.topjava.basejava.model.Organization.Position"/>
+
                             <dl>
-                                <dt>Начальная дата</dt>
-                                <dd><input type="text" name="${type}" size="7" value="${position.startDate}"></dd>
+                                <dt>Начальная дата:</dt>
+                                <dd><input type="text" name="${type}${counter.index}startdate" size="6"
+                                           value="<%=DateUtil.format(position.getStartDate())%>" placeholder="MM/yyyy">
+                                </dd>
                             </dl>
                             <dl>
-                                <dt>Конечная дата</dt>
-                                <dd><input type="text" name="${type}" size="7" value="${position.endDate}"></dd>
+                                <dt>Конечная дата:</dt>
+                                <dd><input type="text" name="${type}${counter.index}enddate" size="6"
+                                           value="<%=DateUtil.format(position.getEndDate())%>" placeholder="MM/yyyy">
+                                </dd>
                             </dl>
+
                             <dt>Позиция</dt>
-                            <dd><input type="text" name="${type}" size="50" value="${position.title}"></dd>
+                            <dd><input type="text" name="${type}${counter.index}title" size="45" value="${position.title}"></dd>
                             <dl>
                                 <dt>Описание</dt>
-                                <dd><textarea name="${type}">${position.description}</textarea></dd>
+                                <p><textarea name="${type}${counter.index}description">${position.description}</textarea></p>
                             </dl>
                         </c:forEach>
                         <hr/>
                     </c:forEach>
-                    </dl>
                 </c:when>
             </c:choose>
         </c:forEach>
     </section>
-    <hr>
     <br/>
     <%--при нажатии кнопки Сохранить post-запрос будет отправлен на сервер--%>
     <button type="submit">Сохранить</button>
-    <button type="button" onclick="window.history.back()">Отменить</button>
+    <button type="button" onclick="window.history.back()">Назад</button>
 </form>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

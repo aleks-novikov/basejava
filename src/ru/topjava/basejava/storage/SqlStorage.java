@@ -1,12 +1,18 @@
 package ru.topjava.basejava.storage;
 
 import ru.topjava.basejava.exception.NotExistStorageException;
-import ru.topjava.basejava.model.*;
+import ru.topjava.basejava.model.AbstractSection;
+import ru.topjava.basejava.model.ContactType;
+import ru.topjava.basejava.model.Resume;
+import ru.topjava.basejava.model.SectionType;
 import ru.topjava.basejava.sql.SqlHelper;
+import ru.topjava.basejava.util.JsonParser;
 
-import java.sql.Date;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SqlStorage implements Storage {
     private SqlHelper sqlHelper;
@@ -54,14 +60,6 @@ public class SqlStorage implements Storage {
                     addSections(rs, resume);
                 }
             }
-
-            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM organization WHERE resume_uuid = ? ORDER BY start_date DESC")) {
-                ps.setString(1, uuid);
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    addOrganizations(rs, resume);
-                }
-            }
             return resume;
         });
     }
@@ -78,10 +76,8 @@ public class SqlStorage implements Storage {
             }
             deleteResumeData(conn, resume, "DELETE FROM contact WHERE contact.resume_uuid = ?");
             deleteResumeData(conn, resume, "DELETE FROM section WHERE section.resume_uuid = ?");
-            deleteResumeData(conn, resume, "DELETE FROM organization WHERE organization.resume_uuid = ?");
             insertContacts(conn, resume);
             insertSections(conn, resume);
-            insertOrganizations(conn, resume);
             return null;
         });
     }
@@ -96,7 +92,6 @@ public class SqlStorage implements Storage {
                     }
                     insertContacts(conn, resume);
                     insertSections(conn, resume);
-                    insertOrganizations(conn, resume);
                     return null;
                 }
         );
@@ -140,14 +135,6 @@ public class SqlStorage implements Storage {
                     addSections(rs, resume);
                 }
             }
-
-            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM organization")) {
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    Resume resume = resumes.get(rs.getString("resume_uuid"));
-                    addOrganizations(rs, resume);
-                }
-            }
             return new ArrayList<>(resumes.values());
         });
     }
@@ -163,58 +150,17 @@ public class SqlStorage implements Storage {
     private void addContacts(ResultSet rs, Resume resume) throws SQLException {
         String value = rs.getString("value");
         if (value != null) {
-            resume.addContact(ContactType.valueOf(rs.getString("type")), value);
+            resume.setContact(ContactType.valueOf(rs.getString("type")), value);
         }
     }
 
     private void addSections(ResultSet rs, Resume resume) throws SQLException {
-        if (rs.getString("type") != null) {
+        String value = rs.getString("value");
+        if (value != null) {
             SectionType type = SectionType.valueOf(rs.getString("type"));
-            switch (type) {
-                case PERSONAL:
-                case OBJECTIVE:
-                    resume.addSection(type, new TextSection(rs.getString("value")));
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    String[] values = rs.getString("value").split("\n");
-                    resume.addSection(type, new ListSection(Arrays.asList(values)));
-            }
+            //десериализация JSON-строки и запись в resume
+            resume.setSection(type, JsonParser.read(value, AbstractSection.class));
         }
-    }
-
-    private void addOrganizations(ResultSet rs, Resume resume) throws SQLException {
-        SectionType type = SectionType.valueOf(rs.getString("type"));
-        OrganizationSection section = (OrganizationSection) resume.getSection(type);
-
-        List<Organization> organizations = new LinkedList<>();
-        if (section != null) {
-            organizations = section.getOrganisations();
-        }
-
-        String name = rs.getString("name");
-        Organization organization = new Organization(name, rs.getString("url"));
-
-        boolean orgAlreadyExist = false;
-        if (organizations.size() != 0) {
-            for (Organization org : organizations) {
-                if (org.getHomePage().getName().equals(name)) {
-                    organization = org;
-                    orgAlreadyExist = true;
-                }
-            }
-        }
-
-        if (organizations.size() == 0 || !orgAlreadyExist) {
-            organizations.add(organization);
-        }
-
-        organization.addOrganizationInfo(
-                rs.getDate("start_date").toLocalDate(),
-                rs.getDate("end_date").toLocalDate(),
-                rs.getString("title"),
-                rs.getString("description"));
-        resume.addSection(type, new OrganizationSection(organizations));
     }
 
     private void insertContacts(Connection connection, Resume resume) throws SQLException {
@@ -235,48 +181,10 @@ public class SqlStorage implements Storage {
                 ps.setString(1, resume.getUuid());
                 SectionType type = entry.getKey();
                 ps.setString(2, type.name());
-
-                switch (type) {
-                    case PERSONAL:
-                    case OBJECTIVE:
-                        ps.setString(3, entry.getValue().toString());
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        ListSection values = (ListSection) entry.getValue();
-                        ps.setString(3, String.join("\n", values.getItems()));
-                }
+                AbstractSection section = entry.getValue();
+                //сериализация данных секции в JSON
+                ps.setString(3, JsonParser.write(section, AbstractSection.class));
                 ps.addBatch();
-            }
-            ps.executeBatch();
-        }
-    }
-
-    private void insertOrganizations(Connection connection, Resume resume) throws SQLException {
-        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO organization" +
-                "(resume_uuid, type, name, url, title, start_date, end_date, description) VALUES (?,?,?,?,?,?,?,?)")) {
-            for (Map.Entry<SectionType, AbstractSection> entry : resume.getSections().entrySet()) {
-                ps.setString(1, resume.getUuid());
-                SectionType type = entry.getKey();
-                switch (type) {
-                    case EXPERIENCE:
-                    case EDUCATION:
-                        ps.setString(2, type.name());
-                        OrganizationSection organization = (OrganizationSection) entry.getValue();
-
-                        for (Organization org : organization.getOrganisations()) {
-                            ps.setString(3, org.getHomePage().getName());
-                            ps.setString(4, org.getHomePage().getUrl());
-
-                            for (Organization.Position position : org.getPositions()) {
-                                ps.setString(5, position.getTitle());
-                                ps.setDate(6, Date.valueOf(position.getStartDate()));
-                                ps.setDate(7, Date.valueOf(position.getEndDate()));
-                                ps.setString(8, position.getDescription());
-                                ps.addBatch();
-                            }
-                        }
-                }
             }
             ps.executeBatch();
         }
