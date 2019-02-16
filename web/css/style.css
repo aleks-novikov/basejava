@@ -19,7 +19,7 @@ footer {
 }
 
 p {
-    margin: 5px 0 10px;
+    margin: 5px 0 0 0;
 }
 
 ul {
@@ -38,7 +38,7 @@ dt {
 
 dd {
     display: inline-block;
-    margin: 3px 0 3px 115px;
+    margin: 3px 0 3px 120px;
 }
 
 h2 {
@@ -46,12 +46,29 @@ h2 {
 }
 
 h3, h4 {
-    margin: 20px 0 5px;
+    margin: 15px 0 10px;
+}
+
+.red {
+    color: #ff0000;
+    font-style: oblique;
+}
+
+.inputLine{
+    width: 84mm;
+}
+
+.inputDateLine {
+    width: 16mm;
+}
+
+.inputPosition {
+    width: 13cm;
 }
 
 textarea {
-    height: 6em;
-    width: 37.5em;
+    height: 4cm;
+    width: 13cm;
 }
 
 a[href^="skype:"] {

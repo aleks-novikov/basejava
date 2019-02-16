@@ -3,6 +3,7 @@ package ru.topjava.basejava.web;
 import ru.topjava.basejava.model.*;
 import ru.topjava.basejava.storage.Storage;
 import ru.topjava.basejava.util.Config;
+import ru.topjava.basejava.util.DateUtil;
 import ru.topjava.basejava.util.HtmlUtil;
 
 import javax.servlet.ServletConfig;
@@ -10,6 +11,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,8 +32,18 @@ public class ResumeServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullname = request.getParameter("fullName");
-        Resume resume = storage.get(uuid);
-        resume.setFullName(fullname);
+        Resume resume;
+        boolean resumeIsNew = false;
+
+        //если uuid пусто, значит резюме ещё не создано
+        if (uuid == null) {
+            resume = new Resume(UUID.randomUUID().toString(), fullname);
+            storage.save(resume);
+            resumeIsNew = true;
+        } else {
+            resume = storage.get(uuid);
+            resume.setFullName(fullname);
+        }
 
         //обработка поступившей информации о контактах
         for (ContactType type : ContactType.values()) {
@@ -44,26 +57,56 @@ public class ResumeServlet extends HttpServlet {
 
         //обработка поступившей информации о секциях
         for (SectionType type : SectionType.values()) {
-            String value = request.getParameter(type.name());
-            String[] values = request.getParameterValues(type.name());
+            String sectionData = request.getParameter(type.name());
+            String[] organizationsNames = request.getParameterValues(type.name());
 
-            if (HtmlUtil.isEmpty(value) && values.length < 2) {
+            if (HtmlUtil.isEmpty(sectionData) && organizationsNames.length < 2) {
                 resume.getSections().remove(type);
             } else
                 switch (type) {
                     case OBJECTIVE:
                     case PERSONAL:
-                        resume.setSection(type, new TextSection(value));
+                        resume.setSection(type, new TextSection(sectionData));
                         break;
                     case QUALIFICATIONS:
                     case ACHIEVEMENT:
-                        resume.setSection(type, new ListSection(Arrays.asList(value.split("\\n"))));
+                        resume.setSection(type, new ListSection(Arrays.asList(
+                                sectionData.replace("\r", "").split("\\n"))));
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
+                        List<Organization> organizations = new ArrayList<>();
+                        String[] urls = request.getParameterValues(type.name() + "url");
+                        for (int i = 0; i < organizationsNames.length; i++) {
+                            String name = organizationsNames[i];
+                            //если имя организации пустое, значит данной позиции нет, и не берём её данные
+                            if (!HtmlUtil.isEmpty(name)) {
+                                List<Organization.Position> positions = new ArrayList<>();
+                                //получение значения counter.index, заданного в файле edit.jsp
+                                //индекс необходим для корректного сопоставления данных
+                                String prefix = type.name() + (resumeIsNew ? "" : i);
+
+                                String[] startDates = request.getParameterValues(prefix + "startDate");
+                                String[] endDates = request.getParameterValues(prefix + "endDate");
+                                String[] titles = request.getParameterValues(prefix + "title");
+                                String[] descriptions = request.getParameterValues(prefix + "description");
+                                for (int j = 0; j < titles.length; j++) {
+                                    if (!HtmlUtil.isEmpty(titles[j])) {
+                                        positions.add(new Organization.Position(
+                                                DateUtil.parse(startDates[j]),
+                                                DateUtil.parse(endDates[j]),
+                                                titles[j], descriptions[j]));
+                                    }
+                                }
+                                organizations.add(new Organization(new Link(name,
+                                        urls == null ? "" : urls[i]),
+                                        positions));
+                            }
+                        }
+                        resume.setSection(type, new OrganizationSection(organizations));
+                        break;
                 }
         }
-
         storage.update(resume);
         response.sendRedirect("resume");
     }
@@ -80,21 +123,29 @@ public class ResumeServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
             return;
         }
-        Resume resume;
+
+        Resume resume = null;
+        String pageName;
         switch (action) {
             case "add":
-//                String fullName = request.getParameter("fullName");
-                String fullName = "ФИО";
-                resume = new Resume(UUID.randomUUID().toString(), fullName);
-                storage.save(resume);
+                pageName = "add.jsp";
                 break;
             case "delete":
-                storage.delete(uuid);
+                int answer = JOptionPane.showConfirmDialog(new JPanel(new FlowLayout()), "Вы уверены, что хотите удалить резюме " +
+                        storage.get(uuid).getFullName() + "?", "Удаление резюме", JOptionPane.OK_CANCEL_OPTION);
+
+                if (answer == 0) {
+                    storage.delete(uuid);
+                }
                 //перенаправление на начальную страницу приложения с помощью запроса к серверу с параметром "resume"
                 response.sendRedirect("resume");
                 return;
             case "view":
+                resume = storage.get(uuid);
+                pageName = "view.jsp";
+                break;
             case "edit":
+                pageName = "edit.jsp";
                 resume = storage.get(uuid);
                 for (SectionType type : new SectionType[]{SectionType.EXPERIENCE, SectionType.EDUCATION}) {
                     OrganizationSection section = (OrganizationSection) resume.getSection(type);
@@ -121,19 +172,6 @@ public class ResumeServlet extends HttpServlet {
                 throw new IllegalStateException("Action " + action + " is illegal!");
         }
         request.setAttribute("resume", resume);
-
-        //вызов того или иного jsp-файла согласно выбранному действию
-        String pageName = null;
-        switch (action) {
-            case "add":
-                pageName = "add.jsp";
-                break;
-            case "edit":
-                pageName = "edit.jsp";
-                break;
-            case "view":
-                pageName = "view.jsp";
-        }
         request.getRequestDispatcher("/WEB-INF/jsp/" + pageName).forward(request, response);
     }
 }

@@ -13,7 +13,7 @@
 <section>
     <table border="1" cellpadding="8" cellspacing="0">
         <tr>
-            <th>Имя</th>
+            <th>ФИО</th>
             <th>Контакты</th>
             <th></th>
             <th></th>
@@ -23,15 +23,17 @@
             <jsp:useBean id="resume" type="ru.topjava.basejava.model.Resume"/>
             <tr>
                 <td><a href="resume?uuid=${resume.uuid}&action=view"> ${resume.fullName} </a></td>
-                <td><%=ContactType.PHONE.toHtml(resume.getContact(ContactType.PHONE))%></td>
+                <td><%=ContactType.PHONE.toHtml(resume.getContact(ContactType.PHONE))%>
+                </td>
                 <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png" alt="Удалить резюме"></a></td>
-                <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Редактировать резюме"></a></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Редактировать резюме"></a>
+                </td>
             </tr>
         </c:forEach>
     </table>
     <br/>
-    <p>Добавить новое резюме
-        <a href="resume?uuid=${resume.uuid}&action=add"><img src="img/add.png" alt="Добавить резюме" align="center"></a>
+    <p><b>Добавить новое резюме</b>
+        <a href="resume?action=add"><img src="img/add.png" sizes="50" alt="Добавить резюме" align="center"></a>
     </p>
 </section>
 <jsp:include page="fragments/footer.jsp"/>

@@ -17,7 +17,7 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <h2>${resume.fullName} <a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit.png"></a></h2>
+    <h2>${resume.fullName} <a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Редактировать резюме"></a></h2>
     <c:forEach var="contact" items="${resume.contacts}">
         <jsp:useBean id="contact"
                      type="java.util.Map.Entry<ru.topjava.basejava.model.ContactType, java.lang.String>"/>
@@ -53,25 +53,31 @@
             </c:when>
 
             <c:when test="${type.equals('Опыт работы') || type.equals('Образование')}">
-                <h3>${type}</h3>
                 <c:forEach var="item" items="<%=((OrganizationSection) section).getOrganisations() %>">
-                    <c:choose>
-                        <c:when test="${empty item.homePage.url}">
-                            <h3>${item.homePage.name}</h3>
-                        </c:when>
-                        <c:otherwise>
-                            <h3><a href="${item.homePage.url}">${item.homePage.name}</a></h3>
-                        </c:otherwise>
-                    </c:choose>
+                    <c:if test="${!empty item.homePage.name}">
+                        <h3>${type}</h3>
+                        <c:choose>
+                            <c:when test="${empty item.homePage.url}">
+                                <h3>${item.homePage.name}</h3>
+                            </c:when>
+                            <c:otherwise>
+                                <h3><a href="${item.homePage.url}">${item.homePage.name}</a></h3>
+                            </c:otherwise>
+                        </c:choose>
 
-                    <c:forEach var="data" items="${item.positions}">
-                        <c:set var="startDate" value="${data.startDate}"/>
-                        <c:set var="endDate" value="${data.endDate}"/>
-                        <c:set var="title" value="${data.title}"/>
-                        <c:set var="description" value="${data.description}"/>
-                        ${startDate} - ${endDate}, <b>${title}</b>
-                        <p>${description}</p>
-                    </c:forEach>
+                        <c:forEach var="data" items="${item.positions}">
+                            <c:set var="startDate" value="${data.startDate}"/>
+                            <c:set var="endDate" value="${data.endDate}"/>
+                            <c:set var="title" value="${data.title}"/>
+                            <c:set var="description" value="${data.description}"/>
+                            <c:if test="${!empty startDate}">
+                                ${startDate}— ${endDate}
+                                <b>${title}</b>
+                                <p>${description}</p>
+                                <br/></c:if>
+
+                        </c:forEach>
+                    </c:if>
                 </c:forEach>
             </c:when>
         </c:choose>
