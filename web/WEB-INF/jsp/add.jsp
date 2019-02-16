@@ -15,7 +15,7 @@
 <form method="post" action="resume" enctype="application/x-www-form-urlencoded">
     <dl>
         <dt>ФИО<span class="red">*</span></dt>
-        <dd><input type="text" name="fullName" size="46" required></dd>
+        <dd><input class="inputLine" type="text" name="fullName" required></dd>
     </dl>
 
     <section>
@@ -23,7 +23,7 @@
         <c:forEach var="type" items="<%=ContactType.values()%>">
             <dl>
                 <dt>${type.title}</dt>
-                <dd><input type="text" name="${type.name()}" size="46"></dd>
+                <dd><input class="inputLine" type="text" name="${type.name()}"></dd>
             </dl>
         </c:forEach>
     </section>
@@ -37,7 +37,7 @@
                 </c:when>
                 <c:otherwise>
                     <h3>${type.title}<span class="red">*</span></h3>
-                    <input type="text" name="${type}" size="60" required></c:otherwise>
+                    <input class="inputPosition" type="text" name="${type}" required></c:otherwise>
             </c:choose>
 
             <c:choose>
@@ -52,26 +52,26 @@
                 <c:when test="${type.title.equals('Опыт работы') || type.title.equals('Образование')}">
                     <dl>
                         <dt>Название организации:</dt>
-                        <dd><input type="text" name="${type}" size="46"></dd>
+                        <dd><input class="inputLine" type="text" name="${type}"></dd>
                     </dl>
                     <dl>
                         <dt>Ссылка:</dt>
-                        <dd><input type="text" name="${type}url" size="46"></dd>
+                        <dd><input class="inputLine" type="text" name="${type}url"></dd>
                     </dl>
 
                     <dl>
                         <dt>Начальная дата:</dt>
-                        <dd><input type="text" name="${type}startDate" size="4" placeholder="MM/yyyy">
+                        <dd><input class="inputDateLine" type="text" name="${type}startDate" placeholder="MM/yyyy">
                         </dd>
                     </dl>
                     <dl>
                         <dt>Конечная дата:</dt>
-                        <dd><input type="text" name="${type}endDate" size="4" placeholder="MM/yyyy">
+                        <dd><input class="inputDateLine" type="text" name="${type}endDate" placeholder="MM/yyyy">
                         </dd>
                     </dl>
 
                     <dt>Позиция</dt>
-                    <dd><input type="text" name="${type}title" size="46"></dd>
+                    <dd><input class="inputLine" type="text" name="${type}title"></dd>
                     <dl>
                         <dt>Описание</dt>
                         <p><textarea
