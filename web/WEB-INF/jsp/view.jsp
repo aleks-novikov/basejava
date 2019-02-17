@@ -21,9 +21,17 @@
     <c:forEach var="contact" items="${resume.contacts}">
         <jsp:useBean id="contact"
                      type="java.util.Map.Entry<ru.topjava.basejava.model.ContactType, java.lang.String>"/>
-        ${contact.key.toHtml(contact.value)} <br/>
+
+        <p style="margin: 5px 0">
+            <c:if test="${contact.key.name() == 'PHONE'}"><img class="icon" src="img/phone.png" alt="Тел.:"></c:if>
+            <c:if test="${contact.key.name() == 'HOMEPAGE'}"><a href="${contact.key.toHtml(contact.value)}">
+                <img class="icon" src="img/home.png" alt="Домашняя стр.:"></a>
+            </c:if>
+                ${contact.key.toHtml(contact.value)}
+        </p>
     </c:forEach>
 </section>
+<hr align="left" width="250" size="1"/>
 
 <section>
     <c:forEach var="sectionEntry" items="${resume.sections}">
@@ -35,8 +43,7 @@
 
         <c:choose>
             <c:when test="${type.equals('Позиция')}">
-                <h3> ${type} — <%=((TextSection) section).getText()%>
-                </h3>
+                <h2 style="font-size: 22px"> ${type} — <%=((TextSection) section).getText()%></h2>
             </c:when>
             <c:when test="${type.equals('Личные качества')}">
                 <h3>${type}</h3>
@@ -53,9 +60,9 @@
             </c:when>
 
             <c:when test="${type.equals('Опыт работы') || type.equals('Образование')}">
+                <h3>${type}</h3>
                 <c:forEach var="item" items="<%=((OrganizationSection) section).getOrganisations() %>">
                     <c:if test="${!empty item.homePage.name}">
-                        <h3>${type}</h3>
                         <c:choose>
                             <c:when test="${empty item.homePage.url}">
                                 <h3>${item.homePage.name}</h3>
@@ -74,8 +81,8 @@
                                 ${startDate}— ${endDate}
                                 <b>${title}</b>
                                 <p>${description}</p>
-                                <br/></c:if>
-
+                                <br/>
+                            </c:if>
                         </c:forEach>
                     </c:if>
                 </c:forEach>

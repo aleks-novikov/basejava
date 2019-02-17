@@ -11,8 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -124,29 +122,37 @@ public class ResumeServlet extends HttpServlet {
             return;
         }
 
-        Resume resume = null;
+        Resume resume = storage.get(uuid);
         String pageName;
         switch (action) {
             case "add":
                 pageName = "add.jsp";
                 break;
             case "delete":
-                int answer = JOptionPane.showConfirmDialog(new JPanel(new FlowLayout()), "Вы уверены, что хотите удалить резюме " +
-                        storage.get(uuid).getFullName() + "?", "Удаление резюме", JOptionPane.OK_CANCEL_OPTION);
-
-                if (answer == 0) {
-                    storage.delete(uuid);
+                String message;
+                if (resume.getFullName().equals("Новиков Александр")) {
+                    pageName = "warningMessage.jsp";
+                    message = "Данное резюме является демонстрационным и не подлежит модификации/удалению!";
+                } else {
+                    pageName = "deletingResumeConfirm.jsp";
+                    message = "Вы уверены, что хотите удалить резюме " + resume.getFullName() + " ?";
+                    request.setAttribute("storage", storage);
                 }
-                //перенаправление на начальную страницу приложения с помощью запроса к серверу с параметром "resume"
-                response.sendRedirect("resume");
-                return;
+
+                request.setAttribute("message", message);
+                break;
             case "view":
-                resume = storage.get(uuid);
                 pageName = "view.jsp";
                 break;
             case "edit":
+                if (resume.getFullName().equals("Новиков Александр")) {
+                    pageName = "warningMessage.jsp";
+                    message = "Данное резюме является демонстрационным и не подлежит модификации/удалению!";
+                    request.setAttribute("message", message);
+                    break;
+                }
+
                 pageName = "edit.jsp";
-                resume = storage.get(uuid);
                 for (SectionType type : new SectionType[]{SectionType.EXPERIENCE, SectionType.EDUCATION}) {
                     OrganizationSection section = (OrganizationSection) resume.getSection(type);
                     List<Organization> emptyFirstOrganization = new ArrayList<>();

@@ -29,8 +29,16 @@
         <h3>Контакты</h3>
         <c:forEach var="type" items="<%=ContactType.values()%>">
             <dl>
-                <dt>${type.title}</dt>
-                <dd><input class="inputLine" type="text" name="${type.name()}" value="${resume.getContact(type)}"></dd>
+                <c:choose>
+                    <c:when test="${type.name() == 'EMAIL'}">
+                        <dt>${type.title}<span class="red">*</span></dt>
+                        <dd><input class="inputLine" type="text" name="${type.name()}" value="${resume.getContact(type)}" required></dd>
+                    </c:when>
+                    <c:otherwise>
+                        <dt>${type.title}</dt>
+                        <dd><input class="inputLine" type="text" name="${type.name()}" value="${resume.getContact(type)}"></dd>
+                    </c:otherwise>
+                </c:choose>
             </dl>
         </c:forEach>
     </section>
@@ -110,7 +118,7 @@
                                     </p>
                                 </dl>
                             </c:forEach>
-                            <hr/>
+                            <br/>
                         </c:forEach>
                     </c:if>
                 </c:when>

@@ -22,8 +22,16 @@
         <h3>Контакты</h3>
         <c:forEach var="type" items="<%=ContactType.values()%>">
             <dl>
-                <dt>${type.title}</dt>
-                <dd><input class="inputLine" type="text" name="${type.name()}"></dd>
+                <c:choose>
+                    <c:when test="${type.name() == 'EMAIL'}">
+                        <dt>${type.title}<span class="red">*</span></dt>
+                        <dd><input class="inputLine" type="text" name="${type.name()}" required></dd>
+                    </c:when>
+                    <c:otherwise>
+                        <dt>${type.title}</dt>
+                        <dd><input class="inputLine" name="${type.name()}" type="text"></dd>
+                    </c:otherwise>
+                </c:choose>
             </dl>
         </c:forEach>
     </section>
@@ -78,7 +86,7 @@
                                 name="${type}description"></textarea>
                         </p>
                     </dl>
-                    <hr/>
+                    <br/>
                 </c:when>
             </c:choose>
         </c:forEach>

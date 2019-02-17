@@ -50,9 +50,6 @@ public enum ContactType {
     }
 
     protected String toHtml0(String value) {
-        if (title.equals("Тел.")) {
-            return title + ": " + value;
-        }
         return value;
     }
 
