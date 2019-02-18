@@ -21,14 +21,27 @@
         <c:forEach items="${resumes}" var="resume">
             <%--добавление интеграции с Resume--%>
             <jsp:useBean id="resume" type="ru.topjava.basejava.model.Resume"/>
-            <tr>
-                <td><a href="resume?uuid=${resume.uuid}&action=view"> ${resume.fullName} </a></td>
-                <td><%=ContactType.PHONE.toHtml(resume.getContact(ContactType.EMAIL))%></td>
-                <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png"
-                                                                            alt="Удалить резюме"></a></td>
-                <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Редактировать резюме"></a>
-                </td>
-            </tr>
+
+            <td><a href="resume?uuid=${resume.uuid}&action=view"> ${resume.fullName}</a></td>
+            <td><%=ContactType.PHONE.toHtml(resume.getContact(ContactType.EMAIL))%>
+
+            <c:choose>
+                <c:when test="${resume.fullName.equals('Новиков Александр')}">
+                    <td><img src="img/delete.png" alt="Удалить резюме"></td>
+                    <td><img src="img/edit.png" alt="Редактировать резюме"></td>
+                    <tr>
+                        <td colspan="5" style="font-size: 13px">Резюме 'Новиков Александр' является демонстрационным
+                            и не подлежит модификации/удалению
+                        </td>
+                    </tr>
+                </c:when>
+
+                <c:otherwise>
+                    <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png" alt="Удалить резюме"></a></td>
+                    <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Редактировать резюме"></a>
+                    </td>
+                </c:otherwise>
+            </c:choose>
         </c:forEach>
     </table>
     <br/>

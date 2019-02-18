@@ -122,36 +122,20 @@ public class ResumeServlet extends HttpServlet {
             return;
         }
 
-        Resume resume = storage.get(uuid);
+        Resume resume = (uuid != null) ? storage.get(uuid) : null;
         String pageName;
         switch (action) {
             case "add":
                 pageName = "add.jsp";
                 break;
             case "delete":
-                String message;
-                if (resume.getFullName().equals("Новиков Александр")) {
-                    pageName = "warningMessage.jsp";
-                    message = "Данное резюме является демонстрационным и не подлежит модификации/удалению!";
-                } else {
-                    pageName = "deletingResumeConfirm.jsp";
-                    message = "Вы уверены, что хотите удалить резюме " + resume.getFullName() + " ?";
-                    request.setAttribute("storage", storage);
-                }
-
-                request.setAttribute("message", message);
-                break;
+                storage.delete(uuid);
+                response.sendRedirect("resume");
+                return;
             case "view":
                 pageName = "view.jsp";
                 break;
             case "edit":
-                if (resume.getFullName().equals("Новиков Александр")) {
-                    pageName = "warningMessage.jsp";
-                    message = "Данное резюме является демонстрационным и не подлежит модификации/удалению!";
-                    request.setAttribute("message", message);
-                    break;
-                }
-
                 pageName = "edit.jsp";
                 for (SectionType type : new SectionType[]{SectionType.EXPERIENCE, SectionType.EDUCATION}) {
                     OrganizationSection section = (OrganizationSection) resume.getSection(type);

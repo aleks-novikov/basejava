@@ -16,8 +16,16 @@
 
 <body>
 <jsp:include page="fragments/header.jsp"/>
+<c:choose>
+    <c:when test="${!resume.fullName.equals('Новиков Александр')}">
+        <h2>${resume.fullName} <a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit.png"
+                                                                                     alt="Редактировать резюме"></a>
+        </h2>
+    </c:when>
+    <c:otherwise><h2>${resume.fullName} </h2></c:otherwise>
+</c:choose>
+
 <section>
-    <h2>${resume.fullName} <a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Редактировать резюме"></a></h2>
     <c:forEach var="contact" items="${resume.contacts}">
         <jsp:useBean id="contact"
                      type="java.util.Map.Entry<ru.topjava.basejava.model.ContactType, java.lang.String>"/>
@@ -43,7 +51,8 @@
 
         <c:choose>
             <c:when test="${type.equals('Позиция')}">
-                <h2 style="font-size: 22px"> ${type} — <%=((TextSection) section).getText()%></h2>
+                <h2 style="font-size: 22px"> ${type} — <%=((TextSection) section).getText()%>
+                </h2>
             </c:when>
             <c:when test="${type.equals('Личные качества')}">
                 <h3>${type}</h3>
